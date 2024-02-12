@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -88,37 +87,52 @@ public class ObjectDBRepository {
 			// Indicamos la ID
 			usuarioEjemplo.setIdUser((long) valor);
 
-			System.out.println("Creado usuario con ID: " + valor);			
-						
+			System.out.println("Creado usuario con ID: " + valor);
+
 			// Cogemos tanto el titulo como el genero indicado
 			String titulo = so.getTitulo();
 			String genero = so.getGenero();
-			
+
 			// Lo metemos en un nuevo objeto
 			Juegos juegoEjemplo = new Juegos();
 			juegoEjemplo.setTitulo(titulo);
 			juegoEjemplo.setGenero(genero);
-			
+
 			JuegoUsuarioDTO arrayJuegos = new JuegoUsuarioDTO();
-			
+
 			// Obtenemos la lista de juegos del usuario
 			List<Juegos> listaJuego = arrayJuegos.getListaJuegos();
-			
-			// Verificamos si la lista de juegos es nula
+
+			// Verificamos si la lista de juegos del usuario es nula
 			if (listaJuego == null) {
-				
-			    // Si la lista de juegos es nula, creamos una nueva lista
-			    listaJuego = new ArrayList<>();
+
+				// Si la lista de juegos es nula, creamos una nueva lista
+				listaJuego = new ArrayList<>();
+
+			} else {
+
+				// Si la lista no es nula, verificamos si el juego ya existe en la lista
+				for (Juegos juego : listaJuego) {
+
+					// Comparamos el titulo y el genero del juego actual con el juego que queremos agregar
+					if (juego.getTitulo().equals(titulo) && juego.getGenero().equals(genero)) {
+
+						// Si el juego ya existe, no lo agregamos y salimos del bucle
+						System.out.println("El juego ya existe en la lista.");
+
+						break;
+					}
+				}
 			}
-			
+
 			// Agregamos el nuevo juego a la lista
 			listaJuego.add(juegoEjemplo);
 
 			// Actualizamos la lista de juegos en el DTO
 			arrayJuegos.setListaJuegos(listaJuego);
-			
 
-			System.out.println("Este usuario juega tambien a: " + juegoEjemplo.getTitulo() + " del género:  " + juegoEjemplo.getGenero());
+			System.out.println("Este usuario juega tambien a: " + juegoEjemplo.getTitulo() + " del género:  "
+					+ juegoEjemplo.getGenero());
 
 			// Lo insertamos en la base de datos ObjectDB
 			em.persist(usuarioEjemplo);
@@ -129,34 +143,32 @@ public class ObjectDBRepository {
 
 		// Cerramos conexiones
 		em.close();
-		
+
 		return "Hecho";
 
 	}
 
-
 	// Metodo para mostrar todos los juegos que hay en la lista
-	 public String mostrar() {
-	 
-		 conectar();
-		 
-		 // insertamos la query para coger todos los juegos que hay
-	     TypedQuery<Juegos> query = em.createQuery("SELECT j FROM Juegos j", Juegos.class);
-	     List<Juegos> results = query.getResultList();
-	     
-	     // Recorremos todos los juegos y lo mostramos por pantalla
-	     for (Juegos j : results) {
-	         System.out.println("El nombre del juegos es: " + j.getTitulo() + ", del genero: " + j.getGenero());
-	
-	     }
-		 
-	     // Cerramos conexiones
-		 cerrar(); 
-		 
-		 return "OK";
-		 
-	 }
-	 
+	public String mostrar() {
+
+		conectar();
+
+		// insertamos la query para coger todos los juegos que hay
+		TypedQuery<Juegos> query = em.createQuery("SELECT j FROM Juegos j", Juegos.class);
+		List<Juegos> results = query.getResultList();
+
+		// Recorremos todos los juegos y lo mostramos por pantalla
+		for (Juegos j : results) {
+			System.out.println("El nombre del juegos es: " + j.getTitulo() + ", del genero: " + j.getGenero());
+
+		}
+
+		// Cerramos conexiones
+		cerrar();
+
+		return "OK";
+
+	}
 
 	// Metodo para comprobar si el usuario a insertar en la base de datos ya existe
 	public boolean existeUsuarioPorId(int userId) {
