@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,6 +42,7 @@ public class ObjectDBRepository {
 		emf.close();
 	}
 
+	// Metodo para inserar un juego a un id de MySql
 	public String juegosAsociados(ObjectDBService so) throws SQLException {
 
 		// Llamamos al método que conecta nuestra base de datos
@@ -71,10 +73,10 @@ public class ObjectDBRepository {
 		conectar();
 		em.getTransaction().begin();
 
-		// Vamos a buscar si el usuario ya está repetido enla base de datos
+		// Vamos a buscar si el usuario ya está repetido en la base de datos
 		boolean usuarioRepetido = existeUsuarioPorId(valor);
 
-		// Si el usuario ya existe en la base de datos, lo notificamos
+		// Si el usuario no existe en la base de datos, lo notificamos
 		if (usuarioRepetido == false) {
 			System.out.println("El usuario con ID " + valor + " no existe en la base de datos.");
 
@@ -83,26 +85,29 @@ public class ObjectDBRepository {
 			// Como ya hemos comprobado que esta, lo insertamos
 			JuegoUsuarioDTO usuarioEjemplo = new JuegoUsuarioDTO();
 
-			// Indicamos la ID y los juegos nuevos
+			// Indicamos la ID
 			usuarioEjemplo.setIdUser((long) valor);
 
 			System.out.println("Creado usuario con ID: " + valor);			
 						
+			// Cogemos tanto el titulo como el genero indicado
 			String titulo = so.getTitulo();
 			String genero = so.getGenero();
 			
+			// Lo metemos en un nuevo objeto
 			Juegos juegoEjemplo = new Juegos();
 			juegoEjemplo.setTitulo(titulo);
 			juegoEjemplo.setGenero(genero);
 			
 			JuegoUsuarioDTO arrayJuegos = new JuegoUsuarioDTO();
 			
-			// Obtener la lista de juegos del usuario
+			// Obtenemos la lista de juegos del usuario
 			List<Juegos> listaJuego = arrayJuegos.getListaJuegos();
 			
-			// Verificar si la lista de juegos es nula (esto puede ocurrir si no se ha inicializado)
+			// Verificamos si la lista de juegos es nula
 			if (listaJuego == null) {
-			    // Si la lista de juegos es nula, crea una nueva lista
+				
+			    // Si la lista de juegos es nula, creamos una nueva lista
 			    listaJuego = new ArrayList<>();
 			}
 			
@@ -113,94 +118,50 @@ public class ObjectDBRepository {
 			arrayJuegos.setListaJuegos(listaJuego);
 			
 
-			System.out.println("Este usuario juega tambien a: " + juegoEjemplo.getTitulo() + juegoEjemplo.getGenero());
+			System.out.println("Este usuario juega tambien a: " + juegoEjemplo.getTitulo() + " del género:  " + juegoEjemplo.getGenero());
 
 			// Lo insertamos en la base de datos ObjectDB
-
 			em.persist(usuarioEjemplo);
 			em.persist(juegoEjemplo);
 		}
 
 		em.getTransaction().commit();
 
-		/*
-		 * TypedQuery<Usuario> query =
-		 * em.createQuery("SELECT a FROM users a JOIN FETCH a.juegos", Usuario.class);
-		 * List<Usuario> usuarioLista = query.getResultList();
-		 * System.out.println(usuarioLista);
-		 *
-		 * for (Usuario usuario : usuarioLista) {
-		 * System.out.println("Nombre del Jugador: " + usuario.getId());
-		 *
-		 * List<Juegos> juegosLista = usuario.getJuegos();
-		 * System.out.println("Juegos asociados:");
-		 *
-		 * for (Juegos juego : juegosLista) { System.out.println("- " +
-		 * juego.getTitulo()); }
-		 *
-		 * System.out.println("------------------------"); }
-		 */
-
+		// Cerramos conexiones
 		em.close();
+		
 		return "Hecho";
 
 	}
 
-	public String crearJuego() {
-		conectar();
 
-		em.getTransaction().begin();
-
-		Juegos juegoEjemplo = new Juegos();
-		juegoEjemplo.setTitulo("Minecraft");
-		juegoEjemplo.setGenero("Supervivencia");
-
-		em.persist(juegoEjemplo);
-
-		juegoEjemplo = new Juegos();
-		juegoEjemplo.setTitulo("CaesarIV");
-		juegoEjemplo.setGenero("Construccion");
-
-		em.persist(juegoEjemplo);
-
-		em.getTransaction().commit();
-
-		em.close();
-		return "Hecho";
-
-	}
-
-	/*
-	 * public String mostrar() {
-	 * 
-	 * conectar();
-	 * 
-	 * TypedQuery<Usuario> query =
-	 * em.createQuery("SELECT a FROM Jugador a JOIN FETCH a.juegos", Usuario.class);
-	 * List<Usuario> usuarios = query.getResultList(); System.out.println(usuarios);
-	 * 
-	 * for (Usuario usuario : usuarios) { //
-	 * 
-	 * System.out.println("Nombre del Amigo: " + valor);
-	 * 
-	 * List<Juegos> juego = usuario.getJuegos();
-	 * System.out.println("Direcciones asociadas:");
-	 * 
-	 * for (Juegos juegos : juego) { System.out.println("- " + juegos.getTitulo());
-	 * 
-	 * }
-	 * 
-	 * System.out.println("------------------------"); }
-	 * 
-	 * cerrar(); return "OK";
-	 * 
-	 * 
-	 * }
-	 */
+	// Metodo para mostrar todos los juegos que hay en la lista
+	 public String mostrar() {
+	 
+		 conectar();
+		 
+		 // insertamos la query para coger todos los juegos que hay
+	     TypedQuery<Juegos> query = em.createQuery("SELECT j FROM Juegos j", Juegos.class);
+	     List<Juegos> results = query.getResultList();
+	     
+	     // Recorremos todos los juegos y lo mostramos por pantalla
+	     for (Juegos j : results) {
+	         System.out.println("El nombre del juegos es: " + j.getTitulo() + ", del genero: " + j.getGenero());
+	
+	     }
+		 
+	     // Cerramos conexiones
+		 cerrar(); 
+		 
+		 return "OK";
+		 
+	 }
+	 
 
 	// Metodo para comprobar si el usuario a insertar en la base de datos ya existe
 	public boolean existeUsuarioPorId(int userId) {
 
+		// Insertamos la query para saber is existe el id
 		String sql = "SELECT COUNT(*) FROM users WHERE id = ?";
 		int count = jdbcTemplate.queryForObject(sql, Integer.class, userId);
 

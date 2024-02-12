@@ -34,6 +34,12 @@ public class ObjectDBService {
 		repositoryBBDD.juegosAsociados(so);
 
 	}
+	
+	public void mostrar() {
+		// Lo mandamos al repositorio
+		repositoryBBDD.mostrar();
+
+	}
 
 	public String getEmail() {
 		return this.email;
