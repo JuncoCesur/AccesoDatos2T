@@ -21,4 +21,4 @@ public class ObjectDBController {
 		public void juegosAsociados(@RequestParam String email, @RequestParam String titulo, @RequestParam String genero) throws SQLException  {
 			conexionService.juegosAsociados(email, titulo, genero);
 		}
-} "tus muertos"
+}

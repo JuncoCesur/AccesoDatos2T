@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -87,9 +88,30 @@ public class ObjectDBRepository {
 
 			System.out.println("Creado usuario con ID: " + valor);			
 						
+			String titulo = so.getTitulo();
+			String genero = so.getGenero();
+			
 			Juegos juegoEjemplo = new Juegos();
-			juegoEjemplo.getTitulo();
-			juegoEjemplo.getGenero();
+			juegoEjemplo.setTitulo(titulo);
+			juegoEjemplo.setGenero(genero);
+			
+			JuegoUsuarioDTO arrayJuegos = new JuegoUsuarioDTO();
+			
+			// Obtener la lista de juegos del usuario
+			List<Juegos> listaJuego = arrayJuegos.getListaJuegos();
+			
+			// Verificar si la lista de juegos es nula (esto puede ocurrir si no se ha inicializado)
+			if (listaJuego == null) {
+			    // Si la lista de juegos es nula, crea una nueva lista
+			    listaJuego = new ArrayList<>();
+			}
+			
+			// Agregamos el nuevo juego a la lista
+			listaJuego.add(juegoEjemplo);
+
+			// Actualizamos la lista de juegos en el DTO
+			arrayJuegos.setListaJuegos(listaJuego);
+			
 
 			System.out.println("Este usuario juega tambien a: " + juegoEjemplo.getTitulo() + juegoEjemplo.getGenero());
 

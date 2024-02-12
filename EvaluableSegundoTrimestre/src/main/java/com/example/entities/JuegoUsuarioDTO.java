@@ -12,13 +12,13 @@ public class JuegoUsuarioDTO {
 	
 	@Id
 	private Long idUser;
-	private List<String> listaJuegos;
+	private List<Juegos> listaJuegos;
 	
 	public JuegoUsuarioDTO() {
 		
 	}
  
-	public JuegoUsuarioDTO(Long idUser, List<String> listaJuegos) {
+	public JuegoUsuarioDTO(Long idUser, List<Juegos> listaJuegos) {
 		this.idUser = idUser;
 		this.listaJuegos = listaJuegos;
 	}
@@ -35,11 +35,11 @@ public class JuegoUsuarioDTO {
 		this.idUser = idUser;
 	}
  
-	public List<String> getListaJuegos() {
+	public List<Juegos> getListaJuegos() {
 		return listaJuegos;
 	}
  
-	public void setListaJuegos(List<String> listaJuegos) {
+	public void setListaJuegos(List<Juegos> listaJuegos) {
 		this.listaJuegos = listaJuegos;
 	}
 }
