@@ -17,9 +17,8 @@ public class ExistDBService {
 
 	}
 	
-	public void insertar() {
-		// Lo mandamos al repositorio
-		repositoryBBDD.insertar();
+	public String insertar() {
+		return repositoryBBDD.insertar();
 
 	}
 }

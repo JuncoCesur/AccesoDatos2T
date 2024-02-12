@@ -115,7 +115,12 @@
 <!--			<artifactId>ProyectoBBDD-solo-Patri</artifactId>-->
 <!--			<version>0.0.1-SNAPSHOT</version>-->
 <!--		</dependency>-->
- 
+
+		<dependency>
+			<groupId>com.existdb</groupId>
+			<artifactId>existdb</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
  
 	<build>

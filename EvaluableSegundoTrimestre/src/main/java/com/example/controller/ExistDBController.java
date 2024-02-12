@@ -24,7 +24,7 @@ public class ExistDBController {
 	
     @PutMapping("/insertar")
     @ResponseBody
-    public void insertar() {
+    public String insertar() {
         return conexionService.insertar();
     }
 
