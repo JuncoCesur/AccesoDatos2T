@@ -16,4 +16,10 @@ public class ExistDBService {
 		repositoryBBDD.obtenerServicioXPath();
 
 	}
+	
+	public void insertar() {
+		// Lo mandamos al repositorio
+		repositoryBBDD.insertar();
+
+	}
 }
