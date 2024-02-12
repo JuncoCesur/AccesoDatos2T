@@ -1,10 +1,17 @@
 package com.example.repository;
 
+import java.io.StringReader;
+
 import org.springframework.stereotype.Repository;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
 import org.xmldb.api.modules.XPathQueryService;
+
+import com.existdb.existdb.entities.Documento;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
 
 @Repository
 public class ExistDBRepository {
@@ -30,8 +37,9 @@ public class ExistDBRepository {
     public String insertar() {
         
         try {
-            String sQuery = "update insert <documento><id>6</id><nombre>Prueba 6</nombre></documento>" +
-                    " into doc('Documentos/Prueba1')/documentos";
+        	String sQuery = "update insert <documento><id>6</id><nombre>Prueba 6</nombre></documento>" +
+                    " into doc('/SegundaEvaluacion/XMLAccesoDatos.xml')/db";
+
             XPathQueryService service = obtenerServicioXPath();
             service.query(sQuery);
         } catch (Exception e) {
@@ -40,4 +48,5 @@ public class ExistDBRepository {
             
         return "OK";
     }
+    
 }
