@@ -153,7 +153,7 @@ public class ObjectDBRepository {
 
 		conectar();
 
-		// insertamos la query para coger todos los juegos que hay
+		// Insertamos la query para coger todos los juegos que hay
 		TypedQuery<Juegos> query = em.createQuery("SELECT j FROM Juegos j", Juegos.class);
 		List<Juegos> results = query.getResultList();
 
