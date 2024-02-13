@@ -12,20 +12,20 @@ public class JuegoUsuarioDTO {
 	
 	@Id
 	private Long idUser;
-	private List<Juegos> listaJuegos;
+	private List<Juego> listaJuegosUsuario;
 	
 	public JuegoUsuarioDTO() {
 		
 	}
  
-	public JuegoUsuarioDTO(Long idUser, List<Juegos> listaJuegos) {
+	public JuegoUsuarioDTO(Long idUser, List<Juego> listaJuegosUsuario) {
 		this.idUser = idUser;
-		this.listaJuegos = listaJuegos;
+		this.listaJuegosUsuario = listaJuegosUsuario;
 	}
 	
 	@OneToMany
 	@JoinColumn(name = "idJuegos")
-	public Juegos juegos;
+	public Juego juegos;
  
 	public Long getIdUser() {
 		return idUser;
@@ -35,11 +35,11 @@ public class JuegoUsuarioDTO {
 		this.idUser = idUser;
 	}
  
-	public List<Juegos> getListaJuegos() {
-		return listaJuegos;
+	public List<Juego> getListaJuegosUsuario() {
+		return listaJuegosUsuario;
 	}
  
-	public void setListaJuegos(List<Juegos> listaJuegos) {
-		this.listaJuegos = listaJuegos;
+	public void setListaJuegosUsuario(List<Juego> listaJuegosUsuario) {
+		this.listaJuegosUsuario = listaJuegosUsuario;
 	}
 }
