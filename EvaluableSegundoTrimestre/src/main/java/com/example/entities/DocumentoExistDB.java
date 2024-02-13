@@ -14,11 +14,19 @@ public class DocumentoExistDB {
 	@XmlAttribute(name = "id")
 	private Long id;
 	
-	@XmlElementWrapper(name = "juegos")
-	@XmlElement(name = "juegos")
-	List<Juegos> juegos;
+	private JuegoUsuarioDTO idUser;
 	
-	@XmlTransient
+	@XmlElementWrapper(name = "juegos")
+	@XmlElement(name = "juego")
+	List<JuegoUsuarioDTO> juegos;
+	
+	public JuegoUsuarioDTO getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(JuegoUsuarioDTO idUser) {
+		this.idUser = idUser;
+	}
 
 	public Long getId() {
 		return id;
@@ -28,11 +36,11 @@ public class DocumentoExistDB {
 		this.id = id;
 	}
 
-	public List<Juegos> getJuegos() {
+	public List<JuegoUsuarioDTO> getJuegos() {
 		return juegos;
 	}
 
-	public void setJuegos(List<Juegos> juegos) {
+	public void setJuegos(List<JuegoUsuarioDTO> juegos) {
 		this.juegos = juegos;
 	}
 
