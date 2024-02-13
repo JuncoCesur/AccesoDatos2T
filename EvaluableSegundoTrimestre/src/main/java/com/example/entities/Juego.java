@@ -12,6 +12,7 @@ public class Juego {
 	@Id
 	@GeneratedValue
 	private Long idJuego;
+	
 	private String titulo;
 	private String genero;	
 	private Long idUsuario;
