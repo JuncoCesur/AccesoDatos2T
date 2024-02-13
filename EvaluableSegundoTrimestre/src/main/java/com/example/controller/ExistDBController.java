@@ -22,6 +22,13 @@ public class ExistDBController {
 			conexionService.obtenerServicioXPath();
 		}
 	
+    @PostMapping("/listado")
+    @ResponseBody
+    public String listado() {
+    	conexionService.listado();
+        return "OK";
+    }
+	
     @PutMapping("/insertar")
     @ResponseBody
     public String insertar() {

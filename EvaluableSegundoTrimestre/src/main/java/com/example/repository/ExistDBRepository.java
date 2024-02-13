@@ -1,10 +1,20 @@
 package com.example.repository;
 
+import java.io.StringReader;
+
 import org.springframework.stereotype.Repository;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Database;
+import org.xmldb.api.base.Resource;
+import org.xmldb.api.base.ResourceIterator;
+import org.xmldb.api.base.ResourceSet;
 import org.xmldb.api.modules.XPathQueryService;
+
+import com.example.entities.ExistJuegoUsuarioDTO;
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
 
 @Repository
 public class ExistDBRepository {
@@ -25,6 +35,39 @@ public class ExistDBRepository {
         service.setProperty("encoding", "ISO-8859-1");
 
         return service;
+    }
+    
+    public String listado() {
+        try {    
+            XPathQueryService service = obtenerServicioXPath();
+
+            //Consulta a lanzar
+            //ResourceSet result = service.query("for $b in doc('Documentos/Prueba1')//documento return $b");
+            ResourceSet result = service.query("doc('SegundaEvaluacion/Prueba1')//usuario");
+            ResourceIterator i = result.getIterator();
+            while (i.hasMoreResources()) { //Procesamos el resultado
+                Resource r = i.nextResource();
+                String xml = (String) r.getContent();
+                System.out.println(xml);
+                
+                ExistJuegoUsuarioDTO documento = obtenerDocumento(xml);
+                                
+                System.out.println(documento.getJuegos());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return "OK";
+    }
+    
+    private ExistJuegoUsuarioDTO obtenerDocumento(String xml) throws Exception {
+    	JAXBContext jaxbContext = JAXBContext.newInstance(ExistJuegoUsuarioDTO.class);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+        StringReader reader = new StringReader(xml);
+        return (ExistJuegoUsuarioDTO) unmarshaller.unmarshal(reader);
+
     }
     
     public String insertar() {

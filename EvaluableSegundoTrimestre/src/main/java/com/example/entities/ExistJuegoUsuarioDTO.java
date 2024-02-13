@@ -8,7 +8,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 
 	@XmlRootElement(name = "usuario")
-	public class MongoJuegoUsuarioDTO {
+	public class ExistJuegoUsuarioDTO {
 
 	    private Long idUsuario;
 	    private List<Juego> juegos;
@@ -19,11 +19,11 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 	        return idUsuario;
 	    }
 	    
-	    public MongoJuegoUsuarioDTO() {
+	    public ExistJuegoUsuarioDTO() {
 			super();
 		}
 
-		public MongoJuegoUsuarioDTO(Long idUsuario, List<Juego> juegos) {
+		public ExistJuegoUsuarioDTO(Long idUsuario, List<Juego> juegos) {
 			this.idUsuario = idUsuario;
 			this.juegos = juegos;
 		}

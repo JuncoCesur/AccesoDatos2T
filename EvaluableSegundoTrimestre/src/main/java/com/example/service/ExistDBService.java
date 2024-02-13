@@ -21,4 +21,9 @@ public class ExistDBService {
 		return repositoryBBDD.insertar();
 
 	}
+	
+	public String listado() {
+		return repositoryBBDD.insertar();
+
+	}
 }
