@@ -8,7 +8,7 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 
-@XmlRootElement(name = "documentoExistDB")
+@XmlRootElement(name = "documento")
 public class DocumentoExistDB {
 
 	@XmlAttribute(name = "id")
