@@ -18,7 +18,7 @@ public class MongoDBController {
     @Autowired
     protected MongoDBService mongoDBService;
 
-    @PostMapping("/listado")
+/*    @PostMapping("/listado")
     @ResponseBody
     public List<JuegoMongo> listar(String titulo) {
         return mongoDBService.listar(titulo);
@@ -28,5 +28,5 @@ public class MongoDBController {
     @ResponseBody
     public String guardar(String titulo, String genero, Integer horas) {
         return mongoDBService.guardar(titulo, genero, horas);
-    }
+    }*/
 }

@@ -31,7 +31,7 @@ public class ExistDBRepository {
         
         try {
         	String sQuery = "update insert <documento><id>6</id><nombre>Prueba 6</nombre></documento>" +
-                    " into doc('/SegundaEvaluacion/XMLAccesoDatos.xml')/db";
+                    " into doc('/SegundaEvaluacion/XMLAccesoDatos.xml')/DocumentoExistDB";
 
             XPathQueryService service = obtenerServicioXPath();
             service.query(sQuery);
