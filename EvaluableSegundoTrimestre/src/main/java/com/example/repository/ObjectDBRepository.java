@@ -50,6 +50,7 @@ public class ObjectDBRepository {
 
 		// Si el usuario no existe en ObjectDB, lo insertamos
 		if (existeUsuario == false) {
+			
 			// Creamos el usuario
 			Long valor = obtenerId(so);
 			usuarioObject.setIdUser(valor);
@@ -69,10 +70,10 @@ public class ObjectDBRepository {
 		// Cogemos la id del juego para insertarlo en el usuario
 		Long idJuego = obtenerIdJuego(so);
 		
-		boolean confirmarAgregarJuegos = verificaListaJuegos(so);
+		boolean confirmarAgregarJuegoAListaUsuario = verificaListaJuegos(so);
 
 		
-		if (confirmarAgregarJuegos) {
+		if (confirmarAgregarJuegoAListaUsuario) {
 			// Agregamos el nuevo juego a la lista
 			JuegoUsuarioDTO agregaJuego = new JuegoUsuarioDTO();
 			agregaJuego.agregarJuego(idJuego);
@@ -138,6 +139,7 @@ public class ObjectDBRepository {
 		return valor;
 	}
 
+	// Metodo para encontrar un juego por su titulo
 	public boolean encontrarJuegoTitulo(ObjectDBService so) {
 
 		conectar();
@@ -164,6 +166,7 @@ public class ObjectDBRepository {
 		return confirmarExisteJuegoTitulo;
 	}
 
+	// Metodo para encontrar un juego por su id
 	public boolean encontrarJuegoId(Long id) {
 
 		conectar();
@@ -178,17 +181,18 @@ public class ObjectDBRepository {
 		// Recorremos todos los juegos y mostramos si se ha encontrado o no
 		if (!resultados.isEmpty()) {
 			confirmar = true;
-			System.out.println("El juego se encuentra ya en la lista");
+			System.out.println("El juego se encuentra ya en la lista de juegos generales");
 
 		} else {
 			confirmar = false;
-			System.out.println("No se ha encontrado el juego en la lista");
+			System.out.println("No se ha encontrado el juego en la lista de juegos generales");
 
 		}
 
 		return confirmar;
 	}
 
+	// Metodo para insertar un juego nuevo
 	public String insertarJuego(ObjectDBService so) {
 
 		String comentario;
@@ -197,14 +201,17 @@ public class ObjectDBRepository {
 		String titulo = so.getTitulo();
 		String genero = so.getGenero();
 
+		// LLamamos la metodo para saber si ya existe o no
 		boolean confirmarExisteJuegoTitulo = encontrarJuegoTitulo(so);
 		System.out.println(confirmarExisteJuegoTitulo);
 
+		// Si ya existe, no lo incluimos
 		if (confirmarExisteJuegoTitulo) {
 
 			comentario = "No se puede incluir, ya existe";
 			System.out.println("No se puede incluir, ya existe");
 
+		// Si no se encuentra, lo insertamos
 		} else {
 
 			conectar();
@@ -214,7 +221,8 @@ public class ObjectDBRepository {
 			Juego nuevoJuego = new Juego();
 			nuevoJuego.setTitulo(titulo);
 			nuevoJuego.setGenero(genero);
-
+			
+			// Metemos el juego en la lista
 			em.persist(nuevoJuego);
 			em.getTransaction().commit();
 
@@ -259,6 +267,7 @@ public class ObjectDBRepository {
 		return confirmar;
 	}
 
+	// Metodo para obtener el id del juego en la lista de juegos generales
 	public Long obtenerIdJuego(ObjectDBService so) {
 
 		conectar();
@@ -276,11 +285,14 @@ public class ObjectDBRepository {
 		return idJuegoEncontrado;
 	}
 
+	// Metodo para verificar si el usuario tiene una lista creada
 	public boolean verificaListaJuegos(ObjectDBService so) {
 
 		JuegoUsuarioDTO verifica = new JuegoUsuarioDTO();
+		
+		// Llamamos al metodo para obtener el id del juego que queremos insertar 
 		Long idJuego = obtenerIdJuego(so);
-		boolean confirmarAgregarJuego = false;
+		boolean confirmarAgregarJuegoAListaUsuario = false;
 
 		// Verificamos si la lista de juegos del usuario es nula
 		List<Long> listaJuego = verifica.getListaJuegosUsuario();
@@ -291,7 +303,7 @@ public class ObjectDBRepository {
 			listaJuego = new ArrayList<Long>();
 			System.out.println("Se ha añadido una nueva lista de Juegos para el usuario");
 			
-			confirmarAgregarJuego = true;
+			confirmarAgregarJuegoAListaUsuario = true;
 
 		} else {
 
@@ -303,15 +315,15 @@ public class ObjectDBRepository {
 				// Si el juego ya existe, no lo agregamos
 				System.out.println("El juego ya existe en la lista.");
 				
-				confirmarAgregarJuego = false;
+				confirmarAgregarJuegoAListaUsuario = false;
 
 			} else {
-				confirmarAgregarJuego = true;
+				confirmarAgregarJuegoAListaUsuario = true;
 				
 			}
 		}
 		
-		return confirmarAgregarJuego;
+		return confirmarAgregarJuegoAListaUsuario;
 	}
 
 }

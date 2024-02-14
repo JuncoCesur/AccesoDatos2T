@@ -1,7 +1,9 @@
 package com.example.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -12,10 +14,14 @@ public class JuegoUsuarioDTO {
 	
 	@Id
 	private Long idUser;
+	
+	@ElementCollection
 	private List<Long> listaJuegosUsuario;
+	
 	private Long idJuego;
 	
 	public JuegoUsuarioDTO() {
+		this.listaJuegosUsuario = new ArrayList<>();
 		
 	}
  
