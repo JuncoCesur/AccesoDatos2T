@@ -11,7 +11,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 	public class ExistJuegoUsuarioDTO {
 
 	    private Long idUsuario;
-	    private List<Juego> juegos;
+	    private List<ExistJuego> juegos;
 
 	    
 	    @XmlElement(name = "id")
@@ -20,10 +20,10 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 	    }
 	    
 	    public ExistJuegoUsuarioDTO() {
-			super();
+
 		}
 
-		public ExistJuegoUsuarioDTO(Long idUsuario, List<Juego> juegos) {
+		public ExistJuegoUsuarioDTO(Long idUsuario, List<ExistJuego> juegos) {
 			this.idUsuario = idUsuario;
 			this.juegos = juegos;
 		}
@@ -34,56 +34,12 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 
 	    @XmlElementWrapper(name = "juegos")
 	    @XmlElement(name = "juego")
-	    public List<Juego> getJuegos() {
+	    public List<ExistJuego> getJuegos() {
 	        return juegos;
 	    }
 
-	    public void setJuegos(List<Juego> juegos) {
+	    public void setJuegos(List<ExistJuego> juegos) {
 	        this.juegos = juegos;
 	    }
 	}
-
-	
-	
-	
-	
-	
-	
-	class Juego {
-		
-	    private String titulo;
-	    private String genero;
-
-	    public Juego() {
-
-		}
-
-	    
-	    public Juego(String titulo, String genero) {
-			this.titulo = titulo;
-			this.genero = genero;
-		}
-	    
-	    
-	    @XmlElement(name = "titulo")
-	    public String getTitulo() {
-	        return titulo;
-	    }
-
-	    public void setTitulo(String titulo) {
-	        this.titulo = titulo;
-	    }
-
-		@XmlElement(name = "genero")
-	    public String getGenero() {
-	        return genero;
-	    }
-
-	    public void setGenero(String genero) {
-	        this.genero = genero;
-	    }
-	}
-
-
-
 

@@ -35,11 +35,55 @@ public class ObjectDBService {
 
 	}
 	
+	public void insertarJuego(String titulo, String genero) {
+		
+		// Creamos un objeto que vaya a coger los parámetros
+		ObjectDBService so = new ObjectDBService();
+		this.titulo = titulo;
+		this.genero = genero;
+
+		// Indicamos que los parámetros de este objeto son los indicados en Postman
+		so.setTitulo(titulo);
+		so.setGenero(genero);
+
+		// Lo mandamos al repositorio
+		repositoryBBDD.insertarJuego(so);
+		
+	}
+	
+	public void encontrarJuego(String titulo) {
+		
+		// Creamos un objeto que vaya a coger los parámetros
+		ObjectDBService so = new ObjectDBService();
+		this.titulo = titulo;
+
+		// Indicamos que los parámetros de este objeto son los indicados en Postman
+		so.setTitulo(titulo);
+
+		repositoryBBDD.encontrarJuegoTitulo(so);
+		
+	}
+	
 	public void mostrar() {
 		// Lo mandamos al repositorio
 		repositoryBBDD.mostrar();
 
 	}
+	
+	public void existeUsuarioObject(String email) throws SQLException {
+		
+		// Creamos un objeto que vaya a coger los parámetros
+		ObjectDBService so = new ObjectDBService();
+		this.email = email;
+
+		// Indicamos que los parámetros de este objeto son los indicados en Postman
+		so.setEmail(email);
+
+		// Lo mandamos al repositorio
+		repositoryBBDD.existeUsuarioObject(so);
+
+	}
+
 
 	public String getEmail() {
 		return this.email;

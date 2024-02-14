@@ -43,7 +43,7 @@ public class ExistDBRepository {
 
             //Consulta a lanzar
             //ResourceSet result = service.query("for $b in doc('Documentos/Prueba1')//documento return $b");
-            ResourceSet result = service.query("doc('SegundaEvaluacion/Prueba1')//usuario");
+            ResourceSet result = service.query("doc('SegundaEvaluacion/XMLAccesoDatos')//usuario");
             ResourceIterator i = result.getIterator();
             while (i.hasMoreResources()) { //Procesamos el resultado
                 Resource r = i.nextResource();
@@ -84,5 +84,7 @@ public class ExistDBRepository {
             
         return "OK";
     }
+    
+    
     
 }

@@ -23,6 +23,24 @@ public class ObjectDBController {
 		}
 	
 	@ResponseBody
+	@PostMapping ("/insertarJuego")
+		public void insertarJuego(@RequestParam String titulo, @RequestParam String genero) throws SQLException  {
+			conexionService.insertarJuego(titulo, genero);
+		}
+	
+	@ResponseBody
+	@PostMapping ("/existeUsuarioObject")
+		public void existeUsuarioObject(@RequestParam String email) throws SQLException {
+			conexionService.existeUsuarioObject(email);
+		}
+	
+	@ResponseBody
+	@PostMapping ("/encontrarJuego")
+		public void encontrarJuego(@RequestParam String titulo) throws SQLException  {
+			conexionService.encontrarJuego(titulo);
+		}
+	
+	@ResponseBody
 	@PostMapping ("/mostrar")
 		public void mostrar() {
 			conexionService.mostrar();
