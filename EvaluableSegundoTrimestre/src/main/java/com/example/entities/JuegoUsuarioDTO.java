@@ -14,26 +14,24 @@ public class JuegoUsuarioDTO {
 	
 	@Id
 	private Long idUser;
-	
+	private Long idSql;
+
+
 	@ElementCollection
-	private List<Long> listaJuegosUsuario;
+	private List<Long> listaJuegosUsuario = new ArrayList<Long>();
 	
-	private Long idJuego;
 	
-	public JuegoUsuarioDTO() {
-		this.listaJuegosUsuario = new ArrayList<>();
-		
-	}
+	public JuegoUsuarioDTO() {}
  
-	public JuegoUsuarioDTO(Long idUser, List<Long> listaJuegosUsuario, Long idJuego) {
+	public JuegoUsuarioDTO(Long idUser, Long idSql, List<Long> listaJuegosUsuario, Juego idJuego) {
 		this.idUser = idUser;
+		this.idSql = idSql;
 		this.listaJuegosUsuario = listaJuegosUsuario;
-		this.idJuego = idJuego;
 	}
 	
 	@OneToMany
-	@JoinColumn(name = "idJuegos")
-	public Juego juegos;
+	@JoinColumn(name = "idJuego")
+	public Juego idJuego;
  
 	public Long getIdUser() {
 		return idUser;
@@ -51,16 +49,45 @@ public class JuegoUsuarioDTO {
 		this.listaJuegosUsuario = listaJuegosUsuario;
 	}
 	
+	
+	public Long getIdSql() {
+		return idSql;
+	}
 
-	public Long getIdJuego() {
+	public void setIdSql(Long idSql) {
+		this.idSql = idSql;
+	}
+
+	/*public Juego getIdJuego() {
 		return idJuego;
-	}
+	}*/
 
-	public void setIdJuego(Long idJuego) {
+	public void setIdJuego(Juego idJuego) {
 		this.idJuego = idJuego;
+	}	
+	
+	// Metodo para devolver el ID del juego
+	public Long recorreLista(Long id) {
+		
+		JuegoUsuarioDTO recorreLista = new JuegoUsuarioDTO();
+		Juego dimeIdJuego = new Juego();
+		dimeIdJuego.setIdJuego(id);
+		Long idJu = dimeIdJuego.getIdJuego();
+		recorreLista.getListaJuegosUsuario();
+		Long realIdJuego = null;
+		
+		for (int i=0; i>=recorreLista.getListaJuegosUsuario().size(); i++) {
+			if (id == idJu) {
+				return realIdJuego;
+			}
+			
+		}
+		
+		return realIdJuego;
+			
 	}
-
-	public void agregarJuego(Long idJuego) {
-        this.listaJuegosUsuario.add(idJuego);
-    }
+	
+	
+	
+	
 }

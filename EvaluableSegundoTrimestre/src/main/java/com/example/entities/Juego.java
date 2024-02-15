@@ -14,8 +14,7 @@ public class Juego {
 	private Long idJuego;
 	
 	private String titulo;
-	private String genero;	
-	private Long idUsuario;
+	private String genero;
  
 	public Juego() {
  
@@ -57,11 +56,4 @@ public class Juego {
 		this.genero = genero;
 	}
  
-	public Long getIdUsuario() {
-		return idUsuario;
-	}
- 
-	public void setIdUsuario(Long idUsuario) {
-		this.idUsuario = idUsuario;
-	}
 }

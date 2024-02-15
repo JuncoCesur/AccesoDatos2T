@@ -45,4 +45,16 @@ public class ObjectDBController {
 		public void mostrar() {
 			conexionService.mostrar();
 		}
+	
+	
+	
+	
+	
+	
+	
+	@ResponseBody
+	@PostMapping ("/pruebitaLista")
+		public void pruebitaLista(@RequestParam Long id) {
+			conexionService.pruebitaLista(id);
+		}
 }
