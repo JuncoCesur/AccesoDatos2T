@@ -31,7 +31,7 @@ public class ObjectDBService {
 		so.setGenero(genero);
 
 		// Lo mandamos al repositorio
-		repositoryBBDD.juegosAsociados(so);
+		repositoryBBDD.juegoAsociado(so);
 
 	}
 	
