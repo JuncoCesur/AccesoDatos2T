@@ -44,12 +44,18 @@ public class ObjectDBRepository {
 		em.getTransaction().begin();
 
 		// Vamos a buscar si el usuario ya está en ObjectDB, retornamos su ID de Object
-		Long valorIdUsuario = existeUsuarioObject(so);
+		boolean valorIdUsuario = existeUsuarioObject(so);
 
 		JuegoUsuarioDTO usuarioObject = new JuegoUsuarioDTO();
 
-		// Si el usuario no existe en ObjectDB, lo insertamos
-		usuarioObject.setIdUser(valorIdUsuario);
+		if (valorIdUsuario == false) {
+			// Si el usuario no existe en ObjectDB, lo insertamos
+			usuarioObject.setIdSql(obtenerId(so));
+
+		} else {
+			encontrarUsuarioObject(so);
+
+		}
 
 		// Consultamos la lista de juegos general
 		boolean confirmarJuegoExiste = encontrarJuegoTitulo(so);
@@ -62,21 +68,19 @@ public class ObjectDBRepository {
 
 		// Cogemos la ID del juego para insertarlo en el usuario
 		Long idJuego = obtenerIdJuego(so);
-		
+
 		// Verificamos si es necesario agregar el juego a la lista del usuario
 		boolean confirmarAgregarJuegoAListaUsuario = verificaListaJuegos(so, idJuego);
 
-		
 		if (!confirmarAgregarJuegoAListaUsuario) {
-			usuarioObject.setIdJuego(idJuego);
+			usuarioObject.agregarJuegoAListaUsuario(idJuego);
 			// Agregamos el nuevo juego a la lista
-			//JuegoUsuarioDTO agregaJuego = new JuegoUsuarioDTO();
-			//agregaJuego.agregarJuego(idJuego);
+			// JuegoUsuarioDTO agregaJuego = new JuegoUsuarioDTO();
+			// agregaJuego.agregarJuego(idJuego);
 		}
 
-		// Lo insertamos en la base de datos ObjectDB 
+		// Lo insertamos en la base de datos ObjectDB
 		em.persist(usuarioObject);
-
 		em.getTransaction().commit();
 
 		// Cerramos conexiones
@@ -106,17 +110,11 @@ public class ObjectDBRepository {
 
 	}
 
-
-
-
-
-	
-	
 	// -------------------------------------------------------------------------------------------------------------------------Usuarios-----------
 
 	// Metodo para conocer si existe el usuario con ID de Mysql en ObjectDB
-	public Long existeUsuarioObject(ObjectDBService so) throws SQLException {
-		
+	public Boolean existeUsuarioObject(ObjectDBService so) throws SQLException {
+
 		// Obtenemos primero el ID de MySql llamando al siguiente metodo
 		Long valor = obtenerId(so);
 
@@ -130,16 +128,32 @@ public class ObjectDBRepository {
 			System.out.println("Usuario encontrado.");
 
 			// Retornamos la ID de ObjectDB
-			return usuario.get(0).getIdUser();
+			return true;
 
 		} else {
 			System.out.println("No se encontró ningún usuario con el ID proporcionado.");
 
 			// Retornamos la ID de ObjectDB
-			return usuario.get(0).getIdUser();
-		}		
+			return false;
+		}
 	}
-	
+
+	// Metodo para encontrar el usuario y devolver su IdSql
+	public Long encontrarUsuarioObject(ObjectDBService so) throws SQLException {
+
+		// Obtenemos primero el ID de MySql llamando al siguiente metodo
+		Long valor = obtenerId(so);
+
+		// Realizamos la consulta para encontrar el usuario por ID de MySql
+		String queryString = "SELECT u FROM JuegoUsuarioDTO u WHERE u.idSql = :valor";
+		List<JuegoUsuarioDTO> usuario = em.createQuery(queryString, JuegoUsuarioDTO.class).setParameter("valor", valor)
+				.getResultList();
+
+		// Retornamos la ID de ObjectDB
+		return usuario.get(0).getIdSql();
+
+	}
+
 	// Metodo para obtener el ID de MySql
 	public Long obtenerId(ObjectDBService so) throws SQLException {
 
@@ -168,37 +182,37 @@ public class ObjectDBRepository {
 		connection_.close();
 		return valor;
 	}
-	
-	
-	
+
 	// -------------------------------------------------------------------------------------------------------------------------Juegos-----------
 
 	// Metodo para insertar un juego nuevo
-		public String insertarJuego(ObjectDBService so) {
+	public String insertarJuego(ObjectDBService so) {
 
-			String comentario;
+		String comentario;
 
-			// Cogemos tanto el titulo como el genero indicado
-			String titulo = so.getTitulo();
-			String genero = so.getGenero();
-			
-			em.getTransaction().begin();
+		conectar();
 
-			// Lo metemos en un nuevo objeto
-			Juego nuevoJuego = new Juego();
-			nuevoJuego.setTitulo(titulo);
-			nuevoJuego.setGenero(genero);
-			
-			// Metemos el juego en la lista
-			em.persist(nuevoJuego);
-			em.getTransaction().commit();
-			
-			comentario = "Insertado: " + titulo + " " + genero;
-			System.out.println("Insertado: " + titulo + " " + genero);
+		// Cogemos tanto el titulo como el genero indicado
+		String titulo = so.getTitulo();
+		String genero = so.getGenero();
 
-			return comentario;
-		}
-	
+		em.getTransaction().begin();
+
+		// Lo metemos en un nuevo objeto
+		Juego nuevoJuego = new Juego();
+		nuevoJuego.setTitulo(titulo);
+		nuevoJuego.setGenero(genero);
+
+		// Metemos el juego en la lista
+		em.persist(nuevoJuego);
+		em.getTransaction().commit();
+
+		comentario = "Insertado: " + titulo + " " + genero;
+		System.out.println("Insertado: " + titulo + " " + genero);
+
+		return comentario;
+	}
+
 	// Metodo para obtener el ID del juego en la lista de juegos generales
 	public Long obtenerIdJuego(ObjectDBService so) {
 
@@ -214,30 +228,21 @@ public class ObjectDBRepository {
 
 		return idJuegoEncontrado;
 	}
-	
+
 	// Metodo para encontrar un juego en la lista del usuario por su ID
 	public boolean encontrarJuegoIdEnListaUsuario(Long id) {
 
-		boolean confirmar = false;
-
 		JuegoUsuarioDTO verificaJuego = new JuegoUsuarioDTO();
-		
-		verificaJuego.getListaJuegosUsuario();
-		
-		// Recorremos la lista de juegos del usuario para encontrarlo
-		for (int i = 0; i>=verificaJuego.getListaJuegosUsuario().size(); i++) {
-			if( id == verificaJuego.recorreLista(id)) {
-				confirmar = true;
-			}
-		}
 
-		return confirmar;
+		verificaJuego.getListaJuegosUsuario();
+
+		return verificaJuego.recorreLista(id);
+
 	}
-	
+
 	// Metodo para encontrar un juego por su titulo
 	public boolean encontrarJuegoTitulo(ObjectDBService so) {
 
-		
 		String titulo = so.getTitulo();
 		boolean confirmarExisteJuegoTitulo = false;
 
@@ -249,7 +254,7 @@ public class ObjectDBRepository {
 		// Si se ha encontrado
 		if (!resultados.isEmpty()) {
 			confirmarExisteJuegoTitulo = true;
-			
+
 			System.out.println("El juego se encuentra ya en la lista");
 
 		} else {
@@ -260,7 +265,7 @@ public class ObjectDBRepository {
 
 		return confirmarExisteJuegoTitulo;
 	}
-	
+
 	// Metodo para encontrar un juego por su ID
 	public boolean encontrarJuegoPorSuId(Long id) {
 
@@ -285,14 +290,13 @@ public class ObjectDBRepository {
 		return confirmar;
 	}
 
-	
 	// -------------------------------------------------------------------------------------------------------------------------Listas-----------
 
 	// Metodo para verificar si el usuario tiene una lista creada
 	public boolean verificaListaJuegos(ObjectDBService so, Long idJuego) {
 
 		JuegoUsuarioDTO verificador = new JuegoUsuarioDTO();
-		
+
 		boolean confirmarAgregarJuegoAListaUsuario = false;
 
 		// Verificamos si la lista de juegos del usuario es nula
@@ -303,37 +307,28 @@ public class ObjectDBRepository {
 			// Si la lista de juegos es nula, creamos una nueva lista
 			listaJuego = new ArrayList<Long>();
 			System.out.println("Se ha añadido una nueva lista de Juegos para el usuario");
-			
+
 			confirmarAgregarJuegoAListaUsuario = true;
 
 		} else {
 
-			// Si la lista no es nula, verificamos si el juego ya existe en la lista del usuario
-			boolean encontradoJuego = encontrarJuegoIdEnListaUsuario(idJuego);
+			// Si la lista no es nula, verificamos si el juego ya existe en la lista del
+			// usuario
+			boolean encontradoJuego = verificador.recorreLista(idJuego);
 
 			if (encontradoJuego) {
 
 				// Si el juego ya existe, no lo agregamos
 				System.out.println("El juego ya existe en la lista.");
-				
+
 				confirmarAgregarJuegoAListaUsuario = false;
 
 			} else {
 				confirmarAgregarJuegoAListaUsuario = true;
-				
+
 			}
 		}
-		
+
 		return confirmarAgregarJuegoAListaUsuario;
 	}
-	
-	public Long pruebitaLista(ObjectDBService pruebita) {
-		JuegoUsuarioDTO pruebaLista = new JuegoUsuarioDTO();
-
-		Long cogeId = pruebita.getId();
-		Long recogeId = pruebaLista.recorreLista(cogeId);
-		
-		return recogeId; //---------------------------------------------------------------------------------------------
-	}
-
 }

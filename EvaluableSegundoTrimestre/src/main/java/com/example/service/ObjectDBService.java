@@ -18,7 +18,7 @@ public class ObjectDBService {
 	private String genero;
 	private Long id;
 
-	public void juegosAsociados(String email, String titulo, String genero) throws SQLException {
+	public void juegoAsociado(String email, String titulo, String genero) throws SQLException {
 		
 		// Creamos un objeto que vaya a coger los parámetros
 		ObjectDBService so = new ObjectDBService();
@@ -85,19 +85,6 @@ public class ObjectDBService {
 
 	}
 	
-	public void pruebitaLista(Long id) {
-		
-		// Creamos un objeto que vaya a coger los parámetros
-		ObjectDBService pruebita = new ObjectDBService();
-		this.id = id;
-
-		// Indicamos que los parámetros de este objeto son los indicados en Postman
-		pruebita.setId(id);
-
-		// Lo mandamos al repositorio
-		repositoryBBDD.pruebitaLista(pruebita);
-
-	}
 
 	public String getEmail() {
 		return this.email;
