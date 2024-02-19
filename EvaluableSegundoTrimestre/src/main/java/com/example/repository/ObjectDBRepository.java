@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import com.example.entities.JuegoUsuarioDTO;
+import com.example.entities.ExistJuegoUsuarioDTO;
 import com.example.entities.Juego;
 import com.example.service.ObjectDBService;
 
@@ -37,7 +38,7 @@ public class ObjectDBRepository {
 	}
 
 	// Metodo para insertar un juego a un usuario de ObjectDB
-	public String juegoAsociado(ObjectDBService so, JuegoUsuarioDTO usuarioObject) throws SQLException {
+	public String juegoAsociado(ObjectDBService so, JuegoUsuarioDTO usuarioObject) throws Exception {
 
 		// Conectamos con la base de datos ObjectDB
 		conectar();
@@ -77,6 +78,9 @@ public class ObjectDBRepository {
 
 			// Lo insertamos en la base de datos ObjectDB
 			em.persist(usuarioObject);
+			
+			ExistJuegoUsuarioDTO usuarioExist = new ExistJuegoUsuarioDTO();
+			usuarioExist.llamarMetodoInsertar(usuarioObject);
 			
 		} else {
 			System.out.println("El juego ya se encuentra en la lista de usuario");

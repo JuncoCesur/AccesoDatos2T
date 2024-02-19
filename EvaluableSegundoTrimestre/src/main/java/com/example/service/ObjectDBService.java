@@ -23,7 +23,7 @@ public class ObjectDBService {
 
 	public ObjectDBService() {}
 	
-	public void juegoAsociado(String email, String titulo, String genero) throws SQLException {
+	public void juegoAsociado(String email, String titulo, String genero) throws Exception {
 		
 		// Creamos un objeto que vaya a coger los parámetros
 		ObjectDBService so = new ObjectDBService();

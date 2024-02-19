@@ -4,8 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.entities.ExistJuego;
+import com.example.entities.ExistJuegoUsuarioDTO;
 import com.example.service.ExistDBService;
 
 
@@ -31,8 +35,8 @@ public class ExistDBController {
 	
     @PutMapping("/insertar")
     @ResponseBody
-    public String insertar() {
-        return conexionService.insertar();
+    public String insertar(@RequestParam Long idSql, @RequestParam Long idJuego, ExistJuegoUsuarioDTO usuario, ExistJuego juegoExist) throws Exception {
+        return conexionService.insertar(idSql, idJuego, usuario, juegoExist);
     }
 
 }

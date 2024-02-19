@@ -33,7 +33,7 @@ public class JuegoUsuarioDTO {
 
 	@OneToMany
 	@JoinColumn(name = "idJuego")
-	public Juego idJuego;
+	public Long idJuego;
 
 	public Long getIdUser() {
 		return idUser;
@@ -60,12 +60,12 @@ public class JuegoUsuarioDTO {
 	}
 
 	
-	public Juego getIdJuego() { 
+	public Long getIdJuego() { 
 		return idJuego; 
 	
 	}	 
 
-	public void setIdJuego(Juego idJuego) {
+	public void setIdJuego(Long idJuego) {
 		this.idJuego = idJuego;
 	}
 

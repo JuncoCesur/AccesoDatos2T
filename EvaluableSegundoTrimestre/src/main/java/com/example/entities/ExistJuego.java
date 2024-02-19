@@ -6,20 +6,20 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "juego")
 public class ExistJuego {
 	
+	private Long idJuego;
 	private String titulo;
     private String genero;
-
-    public ExistJuego() {
-
+   
+    @XmlElement(name = "idJuego")
+    public Long getIdJuego() {
+		return idJuego;
 	}
-  
-    public ExistJuego(String titulo, String genero) {
-		this.titulo = titulo;
-		this.genero = genero;
+
+	public void setIdJuego(Long idJuego) {
+		this.idJuego = idJuego;
 	}
-    
-    
-    @XmlElement(name = "titulo")
+
+	@XmlElement(name = "titulo")
     public String getTitulo() {
         return titulo;
     }
