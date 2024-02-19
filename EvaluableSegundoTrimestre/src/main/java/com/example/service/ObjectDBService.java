@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.entities.JuegoUsuarioDTO;
 import com.example.repository.ObjectDBRepository;
 
 @Service
@@ -17,7 +18,11 @@ public class ObjectDBService {
 	private String titulo;
 	private String genero;
 	private Long id;
+	private JuegoUsuarioDTO usuarioObject;
+	
 
+	public ObjectDBService() {}
+	
 	public void juegoAsociado(String email, String titulo, String genero) throws SQLException {
 		
 		// Creamos un objeto que vaya a coger los parámetros
@@ -32,7 +37,7 @@ public class ObjectDBService {
 		so.setGenero(genero);
 
 		// Lo mandamos al repositorio
-		repositoryBBDD.juegoAsociado(so);
+		repositoryBBDD.juegoAsociado(so, usuarioObject);
 
 	}
 	

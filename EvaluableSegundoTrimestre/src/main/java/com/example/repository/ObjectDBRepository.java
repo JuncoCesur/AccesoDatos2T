@@ -37,7 +37,7 @@ public class ObjectDBRepository {
 	}
 
 	// Metodo para insertar un juego a un usuario de ObjectDB
-	public String juegoAsociado(ObjectDBService so) throws SQLException {
+	public String juegoAsociado(ObjectDBService so, JuegoUsuarioDTO usuarioObject) throws SQLException {
 
 		// Conectamos con la base de datos ObjectDB
 		conectar();
@@ -46,11 +46,10 @@ public class ObjectDBRepository {
 		// Vamos a buscar si el usuario ya está en ObjectDB, retornamos su ID de Object
 		boolean valorIdUsuario = existeUsuarioObject(so);
 
-		JuegoUsuarioDTO usuarioObject = new JuegoUsuarioDTO();
-
 		if (valorIdUsuario == false) {
 			// Si el usuario no existe en ObjectDB, lo insertamos
 			usuarioObject.setIdSql(obtenerId(so));
+			System.out.println("Se ha creado el usuario con idSql: " + usuarioObject.getIdSql());
 
 		} else {
 			encontrarUsuarioObject(so);
@@ -70,22 +69,25 @@ public class ObjectDBRepository {
 		Long idJuego = obtenerIdJuego(so);
 
 		// Verificamos si es necesario agregar el juego a la lista del usuario
-		boolean confirmarAgregarJuegoAListaUsuario = verificaListaJuegos(so, idJuego);
+		boolean confirmarAgregarJuegoAListaUsuario = verificaListaJuegos(so, idJuego, usuarioObject);
 
-		if (!confirmarAgregarJuegoAListaUsuario) {
+		if (confirmarAgregarJuegoAListaUsuario) {
+			System.out.println(idJuego);
 			usuarioObject.agregarJuegoAListaUsuario(idJuego);
-			// Agregamos el nuevo juego a la lista
-			// JuegoUsuarioDTO agregaJuego = new JuegoUsuarioDTO();
-			// agregaJuego.agregarJuego(idJuego);
+
+			// Lo insertamos en la base de datos ObjectDB
+			em.persist(usuarioObject);
+			
+		} else {
+			System.out.println("El juego ya se encuentra en la lista de usuario");
+			
 		}
 
-		// Lo insertamos en la base de datos ObjectDB
-		em.persist(usuarioObject);
 		em.getTransaction().commit();
 
 		// Cerramos conexiones
 		em.close();
-
+ 
 		return "Hecho";
 
 	}
@@ -120,12 +122,11 @@ public class ObjectDBRepository {
 
 		// Realizamos la consulta para encontrar el usuario por ID de MySql
 		String queryString = "SELECT u FROM JuegoUsuarioDTO u WHERE u.idSql = :valor";
-		List<JuegoUsuarioDTO> usuario = em.createQuery(queryString, JuegoUsuarioDTO.class).setParameter("valor", valor)
-				.getResultList();
+		List<JuegoUsuarioDTO> usuario = em.createQuery(queryString, JuegoUsuarioDTO.class).setParameter("valor", valor).getResultList();
 
 		// Verificamos si se encontró algún usuario con el ID proporcionado
 		if (!usuario.isEmpty()) {
-			System.out.println("Usuario encontrado.");
+			System.out.println("Hay un usuario con el idSql: " + valor);
 
 			// Retornamos la ID de ObjectDB
 			return true;
@@ -225,6 +226,7 @@ public class ObjectDBRepository {
 
 		// Metemos el ID en una variable para retornarla
 		Long idJuegoEncontrado = ids.get(0);
+		System.out.println(idJuegoEncontrado);
 
 		return idJuegoEncontrado;
 	}
@@ -255,11 +257,11 @@ public class ObjectDBRepository {
 		if (!resultados.isEmpty()) {
 			confirmarExisteJuegoTitulo = true;
 
-			System.out.println("El juego se encuentra ya en la lista");
+			System.out.println("El juego se encuentra ya en la lista general");
 
 		} else {
 
-			System.out.println("No se ha encontrado el juego en la lista");
+			System.out.println("No se ha encontrado el juego en la lista general");
 
 		}
 
@@ -279,11 +281,11 @@ public class ObjectDBRepository {
 		// Si se ha encontrado
 		if (!resultados.isEmpty()) {
 			confirmar = true;
-			System.out.println("El juego se encuentra ya en la lista de juegos generales");
+			System.out.println("El juego se encuentra ya en la lista general");
 
 		} else {
 			confirmar = false;
-			System.out.println("No se ha encontrado el juego en la lista de juegos generales");
+			System.out.println("No se ha encontrado el juego en la lista general");
 
 		}
 
@@ -293,7 +295,7 @@ public class ObjectDBRepository {
 	// -------------------------------------------------------------------------------------------------------------------------Listas-----------
 
 	// Metodo para verificar si el usuario tiene una lista creada
-	public boolean verificaListaJuegos(ObjectDBService so, Long idJuego) {
+	public boolean verificaListaJuegos(ObjectDBService so, Long idJuego, JuegoUsuarioDTO usuarioObject) {
 
 		JuegoUsuarioDTO verificador = new JuegoUsuarioDTO();
 
@@ -302,10 +304,11 @@ public class ObjectDBRepository {
 		// Verificamos si la lista de juegos del usuario es nula
 		List<Long> listaJuego = verificador.getListaJuegosUsuario();
 
-		if (listaJuego == null) {
+		if (listaJuego == null || listaJuego.isEmpty()) {
 
 			// Si la lista de juegos es nula, creamos una nueva lista
-			listaJuego = new ArrayList<Long>();
+			List<Long> listaJuegoUsuario = new ArrayList<Long>();
+			usuarioObject.setListaJuegosUsuario(listaJuegoUsuario);
 			System.out.println("Se ha añadido una nueva lista de Juegos para el usuario");
 
 			confirmarAgregarJuegoAListaUsuario = true;
@@ -319,7 +322,7 @@ public class ObjectDBRepository {
 			if (encontradoJuego) {
 
 				// Si el juego ya existe, no lo agregamos
-				System.out.println("El juego ya existe en la lista.");
+				System.out.println("El juego ya existe en la lista de usuario.");
 
 				confirmarAgregarJuegoAListaUsuario = false;
 

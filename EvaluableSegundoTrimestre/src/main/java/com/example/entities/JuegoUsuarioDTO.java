@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -13,20 +14,21 @@ import javax.persistence.OneToMany;
 public class JuegoUsuarioDTO {
 
 	@Id
+	@GeneratedValue
 	private Long idUser;
 
 	private Long idSql;
 
 	@ElementCollection
-	private List<Long> listaJuegosUsuario = new ArrayList<Long>();
+	private List<Long> listaJuegosUsuario;
 
 	public JuegoUsuarioDTO() {
 	}
 
-	public JuegoUsuarioDTO(Long idUser, Long idSql, List<Long> listaJuegosUsuario, Juego idJuego) {
+	public JuegoUsuarioDTO(Long idUser, Long idSql, List<Long> listaJuegosUsuario) {
 		this.idUser = idUser;
 		this.idSql = idSql;
-		this.listaJuegosUsuario = listaJuegosUsuario;
+        this.listaJuegosUsuario = (listaJuegosUsuario != null) ? listaJuegosUsuario : new ArrayList<Long>();
 	}
 
 	@OneToMany
@@ -57,9 +59,11 @@ public class JuegoUsuarioDTO {
 		this.idSql = idSql;
 	}
 
-	/*
-	 * public Juego getIdJuego() { return idJuego; }
-	 */
+	
+	public Juego getIdJuego() { 
+		return idJuego; 
+	
+	}	 
 
 	public void setIdJuego(Juego idJuego) {
 		this.idJuego = idJuego;
@@ -73,19 +77,17 @@ public class JuegoUsuarioDTO {
 		
 		boolean result = false;
 
-		if (recorreLista.getListaJuegosUsuario().size() != 0) {
-
-			for (int i = 0; i <= recorreLista.getListaJuegosUsuario().size(); i++) {
-
-				System.out.println(recorreLista.getListaJuegosUsuario().size());
-
-				if (recorreLista.getListaJuegosUsuario().get(i) == id) {
-					result = true;
-				}
-
-			}
-
-		} 
+	    if (listaJuegosUsuario != null && !listaJuegosUsuario.isEmpty()) {
+	    	
+	        for (Long juegoId : listaJuegosUsuario) {
+	        	
+	            if (juegoId.equals(id)) {
+	                result = true;
+	                
+	                break; 
+	            }
+	        }
+	    }
 		
 		return result;
 
@@ -93,12 +95,19 @@ public class JuegoUsuarioDTO {
 
 	public void agregarJuegoAListaUsuario(Long id) {
 		this.listaJuegosUsuario.add(id);
-
-		JuegoUsuarioDTO muestraLista = new JuegoUsuarioDTO();
-
-		for (int i = 0; i <= muestraLista.getListaJuegosUsuario().size(); i++) {
-			System.out.println(this.listaJuegosUsuario.get(i));
-
+		
+		System.out.println("Agregado el juego a la lista de usuario");
+	}
+	
+	public void muestraLista() {
+		
+		JuegoUsuarioDTO recorreLista = new JuegoUsuarioDTO();
+		recorreLista.getListaJuegosUsuario();
+		
+		for (int i = 0; i <= recorreLista.getListaJuegosUsuario().size(); i++) {
+			System.out.println(recorreLista.getListaJuegosUsuario().get(i));
+			
 		}
+		
 	}
 }

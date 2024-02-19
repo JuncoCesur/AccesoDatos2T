@@ -29,7 +29,7 @@ public class Juego {
 	
 	@OneToMany
 	@JoinColumn(name = "idUser")
-	public JuegoUsuarioDTO juegoUsuario;
+	public JuegoUsuarioDTO idUser;
  
 	public Long getIdJuego() {
 		return idJuego;
