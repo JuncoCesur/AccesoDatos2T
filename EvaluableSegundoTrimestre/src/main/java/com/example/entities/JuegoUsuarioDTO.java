@@ -93,12 +93,14 @@ public class JuegoUsuarioDTO {
 
 	}
 
+	// Metodo para agregar el juego a la lista del usuario
 	public void agregarJuegoAListaUsuario(Long id) {
 		this.listaJuegosUsuario.add(id);
 		
 		System.out.println("Agregado el juego a la lista de usuario");
 	}
 	
+	// Metodo para mostrar la lista de cada usuario
 	public void muestraLista() {
 		
 		JuegoUsuarioDTO recorreLista = new JuegoUsuarioDTO();

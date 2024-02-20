@@ -15,6 +15,8 @@ public class Juego {
 	
 	private String titulo;
 	private String genero;
+	
+	public Juego() {}
  
 	public Juego(String titulo, String genero) {
  

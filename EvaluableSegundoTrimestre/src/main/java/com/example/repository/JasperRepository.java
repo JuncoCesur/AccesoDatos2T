@@ -30,6 +30,12 @@ public class JasperRepository {
 
 		lista.add(new Juego("Tomb Raider", "Aventura"));
 		lista.add(new Juego("Rocket League", "Deporte"));
+		lista.add(new Juego("League of Legend", "Competitivo"));
+		lista.add(new Juego("Elden Ring", "Aventura"));
+		lista.add(new Juego("World of Warcraft", "Competitivo"));
+		lista.add(new Juego("Faraón", "Construcción"));
+
+
 
 		return lista;
 	}
