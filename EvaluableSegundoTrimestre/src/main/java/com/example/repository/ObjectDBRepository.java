@@ -78,6 +78,7 @@ public class ObjectDBRepository {
 		if (confirmarAgregarJuegoAListaUsuario) {
 			usuarioObject.agregarJuegoAListaUsuario(idJuego);
 			usuarioObject.setIdJuego(idJuego);
+			
 
 			// Lo insertamos en la base de datos ObjectDB
 			em.persist(usuarioObject);
@@ -93,8 +94,14 @@ public class ObjectDBRepository {
 		ExistJuegoUsuarioDTO usuarioExist = new ExistJuegoUsuarioDTO();
 		ExistJuegoUsuarioDTO existUser = usuarioExist.llamarMetodoInsertar(usuarioObject);
 		ExistDBRepository repository = new ExistDBRepository();
+		Juego juegoObject = new Juego();
+		String titulo = so.getTitulo();
+		String genero = so.getGenero();
+		juegoObject.setTitulo(titulo);
+		juegoObject.setGenero(genero);
 		ExistJuego juego = new ExistJuego();
-		repository.insertar(existUser, null);
+		ExistJuego juegoExist = juego.llamarMetodoInsertar(juegoObject);
+		repository.insertar(existUser, null, juegoExist);
  
 		return "Hecho";
 

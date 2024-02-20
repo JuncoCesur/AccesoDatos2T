@@ -36,4 +36,19 @@ public class ExistJuego {
     public void setGenero(String genero) {
         this.genero = genero;
     }
+    
+	// Metodo para crear el juego de ExistDB
+    public ExistJuego llamarMetodoInsertar(Juego juegoObject) throws Exception {
+    	
+    	ExistJuego juegoExist = new ExistJuego();
+
+    	String tituloObject = juegoObject.getTitulo();
+    	String generoJuego = juegoObject.getGenero();
+    	
+    	juegoExist.setTitulo(tituloObject);
+    	juegoExist.setGenero(generoJuego);
+    	
+    	return juegoExist;
+    	
+    }
 }

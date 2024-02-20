@@ -77,11 +77,11 @@ public class ExistDBRepository {
     }
   
     // Metodo para isertar tanto usuarios como juegos en ExistDB
-    public String insertar(ExistJuegoUsuarioDTO usuarioExist, ExistDBService usuario) throws Exception {
+    public String insertar(ExistJuegoUsuarioDTO usuarioExist, ExistDBService usuario, ExistJuego juego) throws Exception {
     	
     	    // Contruimos la query para insertar usuario y juego
     	    String sQuery = construirConsultaInsercionUsuario(usuarioExist);
-    	    String sQuery2 = construirConsultaInsercionJuego(usuarioExist);
+    	    String sQuery2 = construirConsultaInsercionJuego(usuarioExist, juego);
 
     	    // Ejecutamos la consulta en ExistDB
     	    XPathQueryService service = obtenerServicioXPath();
@@ -99,8 +99,8 @@ public class ExistDBRepository {
 	}
 	
     // Metodo para construir la query para la insercion de juegos
-	public String construirConsultaInsercionJuego(ExistJuegoUsuarioDTO usuarioExist) {
-	    String sQuery2 = "update insert " + juegoToXML(usuarioExist) +
+	public String construirConsultaInsercionJuego(ExistJuegoUsuarioDTO usuarioExist, ExistJuego juego) {
+	    String sQuery2 = "update insert " + juegoToXML(usuarioExist, juego) +
 	                   " into doc('SegundaEvaluacion/XMLAccesoDatosJuegos')/juegos";
 	    return sQuery2;
 	}
@@ -117,14 +117,14 @@ public class ExistDBRepository {
 	}
 	
 	// Metodo para construir el xml de los juegos
-	private String juegoToXML(ExistJuegoUsuarioDTO usuarioExist) {
+	private String juegoToXML(ExistJuegoUsuarioDTO usuarioExist, ExistJuego juego) {
 	    // Aquí conviertes el objeto Usuario a una representación XML para la inserción
 	    // Puedes usar JAXB o construir manualmente la cadena XML
 	    // Por simplicidad, asumimos que JAXB se utiliza para convertir el usuario a XML
 	    // y devolvemos la cadena XML resultante.
 		long nowMillis = System.currentTimeMillis();
 		
-	    return "<juego><idJuego>" + usuarioExist.getIdJuego() + "</idJuego><titulo>" + "</titulo><genero>" + "</genero></juego>";
+	    return "<juego><idJuego>" + usuarioExist.getIdJuego() + "</idJuego><titulo>" + juego.getTitulo() + "</titulo><genero>" + juego.getGenero() + "</genero></juego>";
 	}
   
     

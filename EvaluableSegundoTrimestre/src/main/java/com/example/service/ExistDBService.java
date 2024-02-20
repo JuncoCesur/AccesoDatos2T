@@ -22,7 +22,7 @@ public class ExistDBService {
 
 	}
 	
-	public String insertar(Long idSql, Long idJuego, ExistJuegoUsuarioDTO usuarioExist) throws Exception {
+	public String insertar(Long idSql, Long idJuego, ExistJuegoUsuarioDTO usuarioExist, ExistJuego juego) throws Exception {
 		ExistDBService usuario = new ExistDBService();
 		this.idSql = idSql;
 		this.idJuego = idJuego;
@@ -30,7 +30,7 @@ public class ExistDBService {
 		usuario.setIdSql(idSql);
 		usuario.setIdJuego(idJuego);
 		
-		return repositoryBBDD.insertar(usuarioExist, usuario);
+		return repositoryBBDD.insertar(usuarioExist, usuario, juego);
 
 	}
 	
