@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import com.example.entities.JuegoUsuarioDTO;
+import com.example.entities.ExistJuegoUsuarioDTO;
 import com.example.entities.Juego;
 import com.example.service.ObjectDBService;
 
@@ -26,7 +27,7 @@ public class ObjectDBRepository {
 
 	public void conectar() {
 
-		emf = Persistence.createEntityManagerFactory("DB/juegosAsociados.odb");
+		emf = Persistence.createEntityManagerFactory("DB/juegoAsociado.odb");
 		em = emf.createEntityManager();
 	}
 
@@ -36,61 +37,247 @@ public class ObjectDBRepository {
 		emf.close();
 	}
 
-	// Metodo para insertar un juego a un id de MySql
-	public String juegosAsociados(ObjectDBService so) throws SQLException {
+	// Metodo para insertar un juego a un usuario de ObjectDB
+	public String juegoAsociado(ObjectDBService so, JuegoUsuarioDTO usuarioObject) throws Exception {
 
 		// Conectamos con la base de datos ObjectDB
 		conectar();
 		em.getTransaction().begin();
 
-		// Vamos a buscar si el usuario ya está repetido en ObjectDB
-		boolean existeUsuario = existeUsuarioObject(so);
+		// Vamos a buscar si el usuario ya está en ObjectDB, retornamos su ID de Object
+		boolean valorIdUsuario = existeUsuarioObject(so);
 
-		JuegoUsuarioDTO usuarioObject = new JuegoUsuarioDTO();
+		if (valorIdUsuario == false) {
+			// Si el usuario no existe en ObjectDB, lo insertamos
+			usuarioObject.setIdSql(obtenerId(so));
+			System.out.println("Se ha creado el usuario con idSql: " + usuarioObject.getIdSql());
 
-		// Si el usuario no existe en ObjectDB, lo insertamos
-		if (existeUsuario == false) {
-			
-			// Creamos el usuario
-			Long valor = obtenerId(so);
-			usuarioObject.setIdUser(valor);
-			System.out.println("Creado usuario con ID: " + valor);
+		} else {
+			// Si existe, llamamos al metodo para devolver el idUser del idSql aportado
+			encontrarUsuarioObject(so);
 
 		}
 
-		// Consultamos la lista de juegos
+		// Consultamos la lista de juegos general
 		boolean confirmarJuegoExiste = encontrarJuegoTitulo(so);
 
-		// Si no esta en la lista, la incluimos
+		// Si no esta en la lista general, la incluimos
 		if (confirmarJuegoExiste == false) {
 			insertarJuego(so);
 
 		}
 
-		// Cogemos la id del juego para insertarlo en el usuario
+		// Cogemos la ID del juego para insertarlo en el usuario
 		Long idJuego = obtenerIdJuego(so);
-		
-		boolean confirmarAgregarJuegoAListaUsuario = verificaListaJuegos(so);
 
-		
+		// Verificamos si es necesario agregar el juego a la lista del usuario
+		boolean confirmarAgregarJuegoAListaUsuario = verificaListaJuegos(so, idJuego, usuarioObject);
+
+		// Si es necesario añadir el juego
 		if (confirmarAgregarJuegoAListaUsuario) {
-			// Agregamos el nuevo juego a la lista
-			JuegoUsuarioDTO agregaJuego = new JuegoUsuarioDTO();
-			agregaJuego.agregarJuego(idJuego);
-		}
+			usuarioObject.agregarJuegoAListaUsuario(idJuego);
 
-		// Lo insertamos en la base de datos ObjectDB 
-		em.persist(usuarioObject);
+			// Lo insertamos en la base de datos ObjectDB
+			em.persist(usuarioObject);
+			
+			// Metodo para insertar en ExistDB tras haber creado el usuario en ObjectDB
+			ExistJuegoUsuarioDTO usuarioExist = new ExistJuegoUsuarioDTO();
+			usuarioExist.llamarMetodoInsertar(usuarioObject);
+			
+		} else {
+			System.out.println("El juego ya se encuentra en la lista de usuario");
+			
+		}
 
 		em.getTransaction().commit();
 
 		// Cerramos conexiones
 		em.close();
-
+ 
 		return "Hecho";
 
 	}
 
+	// -------------------------------------------------------------------------------------------------------------------------Usuarios-----------
+
+	// Metodo para conocer si existe el usuario con ID de Mysql en ObjectDB
+	public Boolean existeUsuarioObject(ObjectDBService so) throws SQLException {
+
+		// Obtenemos primero el ID de MySql
+		Long valor = obtenerId(so);
+
+		// Realizamos la consulta para encontrar el usuario por ID de MySql
+		String queryString = "SELECT u FROM JuegoUsuarioDTO u WHERE u.idSql = :valor";
+		List<JuegoUsuarioDTO> usuario = em.createQuery(queryString, JuegoUsuarioDTO.class).setParameter("valor", valor).getResultList();
+
+		// Verificamos si se encontró algún usuario con el ID proporcionado
+		if (!usuario.isEmpty()) {
+			System.out.println("Hay un usuario con el idSql: " + valor);
+
+			// Retornamos la ID de ObjectDB
+			return true;
+
+		} else {
+			System.out.println("No se encontró ningún usuario con el ID proporcionado.");
+
+			// Retornamos la ID de ObjectDB
+			return false;
+		}
+	}
+
+	// Metodo para encontrar el usuario y devolver su idUser
+	public Long encontrarUsuarioObject(ObjectDBService so) throws SQLException {
+
+		// Obtenemos primero el ID de MySql llamando al siguiente metodo
+		Long valor = obtenerId(so);
+
+		// Realizamos la consulta para encontrar el usuario por ID de MySql
+		String queryString = "SELECT u FROM JuegoUsuarioDTO u WHERE u.idSql = :valor";
+		List<JuegoUsuarioDTO> usuario = em.createQuery(queryString, JuegoUsuarioDTO.class).setParameter("valor", valor)
+				.getResultList();
+
+		// Retornamos la ID de ObjectDB
+		return usuario.get(0).getIdUser();
+
+	}
+
+	// Metodo para obtener el ID de MySql
+	public Long obtenerId(ObjectDBService so) throws SQLException {
+
+		// Llamamos al método que conecta nuestra base de datos
+		BBDDRepository db = new BBDDRepository();
+		Connection connection_ = db.llamarBaseDatos();
+
+		// Tenemos que saber la ID del usuario para cogerla
+		String sql = "SELECT id FROM users WHERE email = ?";
+		PreparedStatement stmt = connection_.prepareStatement(sql);
+
+		// Establecemos que nos diga la ID del email aportado
+		stmt.setString(1, so.getEmail());
+
+		// Ejecutamos la consulta
+		ResultSet resultSet = stmt.executeQuery();
+		Long valor = (long) 0;
+
+		// Procesamos los resultados
+		if (resultSet.next()) {
+
+			// Obtenemos el valor de ID
+			valor = resultSet.getLong("id");
+		}
+
+		connection_.close();
+		return valor;
+	}
+
+	// -------------------------------------------------------------------------------------------------------------------------Juegos-----------
+
+	// Metodo para insertar un juego nuevo a la lista general
+	public String insertarJuego(ObjectDBService so) {
+
+		String comentario;
+
+		conectar();
+
+		// Cogemos tanto el titulo como el genero indicado
+		String titulo = so.getTitulo();
+		String genero = so.getGenero();
+
+		em.getTransaction().begin();
+
+		// Lo metemos en un nuevo objeto
+		Juego nuevoJuego = new Juego();
+		nuevoJuego.setTitulo(titulo);
+		nuevoJuego.setGenero(genero);
+
+		// Metemos el juego en la lista general
+		em.persist(nuevoJuego);
+		em.getTransaction().commit();
+
+		comentario = "Insertado: " + titulo + " " + genero;
+		System.out.println("Insertado: " + titulo + " " + genero);
+
+		return comentario;
+	}
+
+	// Metodo para obtener el ID del juego en la lista de juegos generales
+	public Long obtenerIdJuego(ObjectDBService so) {
+
+		// Cogemos el titulo del juego
+		String tituloJuego = so.getTitulo();
+
+		// Realizamos la consulta para obtener la ID del juego por su título
+		String queryString = "SELECT j.idJuego FROM Juego j WHERE j.titulo = :titulo";
+		List<Long> ids = em.createQuery(queryString, Long.class).setParameter("titulo", tituloJuego).getResultList();
+
+		// Metemos el ID en una variable para retornarla
+		Long idJuegoEncontrado = ids.get(0);
+		System.out.println(idJuegoEncontrado);
+
+		return idJuegoEncontrado;
+	}
+
+	// Metodo para encontrar un juego en la lista del usuario por su ID
+	public boolean encontrarJuegoIdEnListaUsuario(Long id) {
+
+		JuegoUsuarioDTO verificaJuego = new JuegoUsuarioDTO();
+
+		verificaJuego.getListaJuegosUsuario();
+
+		return verificaJuego.recorreLista(id);
+
+	}
+
+	// Metodo para encontrar un juego por su titulo
+	public boolean encontrarJuegoTitulo(ObjectDBService so) {
+
+		String titulo = so.getTitulo();
+		boolean confirmarExisteJuegoTitulo = false;
+
+		// Insertamos la query para ver si existe el juego por el titulo
+		TypedQuery<Juego> query = em.createQuery("SELECT j FROM Juego j WHERE j.titulo = :titulo", Juego.class);
+		query.setParameter("titulo", titulo);
+		List<Juego> resultados = query.getResultList();
+
+		// Si se ha encontrado
+		if (!resultados.isEmpty()) {
+			confirmarExisteJuegoTitulo = true;
+
+			System.out.println("El juego se encuentra ya en la lista general");
+
+		} else {
+
+			System.out.println("No se ha encontrado el juego en la lista general");
+
+		}
+
+		return confirmarExisteJuegoTitulo;
+	}
+
+	// Metodo para encontrar un juego por su ID
+	public boolean encontrarJuegoPorSuId(Long id) {
+
+		boolean confirmar = false;
+
+		// Insertamos la query para coger el juego por su ID
+		TypedQuery<Juego> query = em.createQuery("SELECT j FROM Juego j WHERE j.idJuego = :id", Juego.class);
+		query.setParameter("id", id);
+		List<Juego> resultados = query.getResultList();
+
+		// Si se ha encontrado
+		if (!resultados.isEmpty()) {
+			confirmar = true;
+			System.out.println("El juego se encuentra ya en la lista general");
+
+		} else {
+			confirmar = false;
+			System.out.println("No se ha encontrado el juego en la lista general");
+
+		}
+
+		return confirmar;
+	}
+	
 	// Metodo para mostrar todos los juegos que hay en la lista
 	public String mostrar() {
 
@@ -111,219 +298,45 @@ public class ObjectDBRepository {
 
 	}
 
-	// Metodo para obtener el id de MySql
-	public Long obtenerId(ObjectDBService so) throws SQLException {
-
-		// Llamamos al método que conecta nuestra base de datos
-		BBDDRepository db = new BBDDRepository();
-		Connection connection_ = db.llamarBaseDatos();
-
-		// Tenemos que saber la ID del usuario para cogerla
-		String sql = "SELECT id FROM users WHERE email = ?";
-		PreparedStatement stmt = connection_.prepareStatement(sql);
-
-		// Establecemos que nos diga la id del email aportado
-		stmt.setString(1, so.getEmail());
-
-		// Ejecutamos la consulta
-		ResultSet resultSet = stmt.executeQuery();
-		Long valor = (long) 0;
-
-		// Procesamos los resultados
-		while (resultSet.next()) {
-
-			// Obtenemos el valor de id
-			valor = resultSet.getLong("id");
-		}
-
-		return valor;
-	}
-
-	// Metodo para encontrar un juego por su titulo
-	public boolean encontrarJuegoTitulo(ObjectDBService so) {
-
-		conectar();
-
-		String titulo = so.getTitulo();
-		boolean confirmarExisteJuegoTitulo = false;
-
-		// Insertamos la query para coger todos los juegos que hay
-		TypedQuery<Juego> query = em.createQuery("SELECT j FROM Juego j WHERE j.titulo = :titulo", Juego.class);
-		query.setParameter("titulo", titulo);
-		List<Juego> resultados = query.getResultList();
-
-		// Recorremos todos los juegos y mostramos si se ha encontrado o no
-		if (!resultados.isEmpty()) {
-			confirmarExisteJuegoTitulo = true;
-			System.out.println("El juego se encuentra ya en la lista");
-
-		} else {
-			confirmarExisteJuegoTitulo = false;
-			System.out.println("No se ha encontrado el juego en la lista");
-
-		}
-
-		return confirmarExisteJuegoTitulo;
-	}
-
-	// Metodo para encontrar un juego por su id
-	public boolean encontrarJuegoId(Long id) {
-
-		conectar();
-
-		boolean confirmar = false;
-
-		// Insertamos la query para coger todos los juegos que hay
-		TypedQuery<Juego> query = em.createQuery("SELECT j FROM Juego j WHERE j.idJuego = :id", Juego.class);
-		query.setParameter("id", id);
-		List<Juego> resultados = query.getResultList();
-
-		// Recorremos todos los juegos y mostramos si se ha encontrado o no
-		if (!resultados.isEmpty()) {
-			confirmar = true;
-			System.out.println("El juego se encuentra ya en la lista de juegos generales");
-
-		} else {
-			confirmar = false;
-			System.out.println("No se ha encontrado el juego en la lista de juegos generales");
-
-		}
-
-		return confirmar;
-	}
-
-	// Metodo para insertar un juego nuevo
-	public String insertarJuego(ObjectDBService so) {
-
-		String comentario;
-
-		// Cogemos tanto el titulo como el genero indicado
-		String titulo = so.getTitulo();
-		String genero = so.getGenero();
-
-		// LLamamos la metodo para saber si ya existe o no
-		boolean confirmarExisteJuegoTitulo = encontrarJuegoTitulo(so);
-		System.out.println(confirmarExisteJuegoTitulo);
-
-		// Si ya existe, no lo incluimos
-		if (confirmarExisteJuegoTitulo) {
-
-			comentario = "No se puede incluir, ya existe";
-			System.out.println("No se puede incluir, ya existe");
-
-		// Si no se encuentra, lo insertamos
-		} else {
-
-			conectar();
-			em.getTransaction().begin();
-
-			// Lo metemos en un nuevo objeto
-			Juego nuevoJuego = new Juego();
-			nuevoJuego.setTitulo(titulo);
-			nuevoJuego.setGenero(genero);
-			
-			// Metemos el juego en la lista
-			em.persist(nuevoJuego);
-			em.getTransaction().commit();
-
-			comentario = "Insertado: " + titulo + " " + genero;
-			System.out.println("Insertado: " + titulo + " " + genero);
-
-		}
-
-		return comentario;
-	}
-
-	// Metodo para conocer si existe el usuario con id de Mysql en ObjectDB
-	public boolean existeUsuarioObject(ObjectDBService so) throws SQLException {
-
-		boolean confirmar;
-
-		// Conectamos con ObjectDB
-		conectar();
-
-		// Obtenemos primero el ID de MySql llamando al siguiente metodo
-		Long valor = obtenerId(so);
-
-		// Realizamos la consulta para encontrar el usuario por ID de MySql
-		String queryString = "SELECT u FROM JuegoUsuarioDTO u WHERE u.idUser = :valor";
-		List<JuegoUsuarioDTO> usuario = em.createQuery(queryString, JuegoUsuarioDTO.class).setParameter("valor", valor)
-				.getResultList();
-
-		// Verificamos si se encontró algún usuario con el ID proporcionado
-		if (!usuario.isEmpty()) {
-			System.out.println("Usuario encontrado.");
-
-			// Retornamos que se ha encontrado
-			confirmar = true;
-
-		} else {
-			System.out.println("No se encontró ningún usuario con el ID proporcionado.");
-
-			// Retornamos que no existe ningun usuario
-			confirmar = false;
-		}
-
-		return confirmar;
-	}
-
-	// Metodo para obtener el id del juego en la lista de juegos generales
-	public Long obtenerIdJuego(ObjectDBService so) {
-
-		conectar();
-
-		// Cogemos el titulo del juego
-		String tituloJuego = so.getTitulo();
-
-		// Realizamos la consulta para obtener la ID del juego por su título
-		String queryString = "SELECT j.idJuego FROM Juego j WHERE j.titulo = :titulo";
-		List<Long> ids = em.createQuery(queryString, Long.class).setParameter("titulo", tituloJuego).getResultList();
-
-		// Metemos el ID en una variable para retornarla
-		Long idJuegoEncontrado = ids.get(0);
-
-		return idJuegoEncontrado;
-	}
+	// -------------------------------------------------------------------------------------------------------------------------Listas-----------
 
 	// Metodo para verificar si el usuario tiene una lista creada
-	public boolean verificaListaJuegos(ObjectDBService so) {
+	public boolean verificaListaJuegos(ObjectDBService so, Long idJuego, JuegoUsuarioDTO usuarioObject) {
 
-		JuegoUsuarioDTO verifica = new JuegoUsuarioDTO();
-		
-		// Llamamos al metodo para obtener el id del juego que queremos insertar 
-		Long idJuego = obtenerIdJuego(so);
+		JuegoUsuarioDTO verificador = new JuegoUsuarioDTO();
+
 		boolean confirmarAgregarJuegoAListaUsuario = false;
 
 		// Verificamos si la lista de juegos del usuario es nula
-		List<Long> listaJuego = verifica.getListaJuegosUsuario();
+		List<Long> listaJuego = verificador.getListaJuegosUsuario();
 
-		if (listaJuego == null) {
+		if (listaJuego == null || listaJuego.isEmpty()) {
 
-			// Si la lista de juegos es nula, creamos una nueva lista
-			listaJuego = new ArrayList<Long>();
+			// Si la lista de juegos es nula o esta vacia, creamos una nueva lista
+			List<Long> listaJuegoUsuario = new ArrayList<Long>();
+			usuarioObject.setListaJuegosUsuario(listaJuegoUsuario);
 			System.out.println("Se ha añadido una nueva lista de Juegos para el usuario");
-			
+
 			confirmarAgregarJuegoAListaUsuario = true;
 
 		} else {
 
-			// Si la lista no es nula, verificamos si el juego ya existe en la lista
-			boolean encontradoJuego = encontrarJuegoId(idJuego);
+			// Verificamos si el juego ya existe en la lista del usuario
+			boolean encontradoJuego = verificador.recorreLista(idJuego);
 
 			if (encontradoJuego) {
 
 				// Si el juego ya existe, no lo agregamos
-				System.out.println("El juego ya existe en la lista.");
-				
+				System.out.println("El juego ya existe en la lista de usuario.");
+
 				confirmarAgregarJuegoAListaUsuario = false;
 
 			} else {
 				confirmarAgregarJuegoAListaUsuario = true;
-				
+
 			}
 		}
-		
+
 		return confirmarAgregarJuegoAListaUsuario;
 	}
-
 }

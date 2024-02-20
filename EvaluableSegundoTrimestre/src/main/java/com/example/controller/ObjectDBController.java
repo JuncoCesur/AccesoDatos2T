@@ -17,9 +17,9 @@ public class ObjectDBController {
 	protected ObjectDBService conexionService;
 	
 	@ResponseBody
-	@PostMapping ("/juegosAsociados")
-		public void juegosAsociados(@RequestParam String email, @RequestParam String titulo, @RequestParam String genero) throws SQLException  {
-			conexionService.juegosAsociados(email, titulo, genero);
+	@PostMapping ("/juegoAsociado")
+		public void juegoAsociado(@RequestParam String email, @RequestParam String titulo, @RequestParam String genero) throws Exception  {
+			conexionService.juegoAsociado(email, titulo, genero);
 		}
 	
 	@ResponseBody

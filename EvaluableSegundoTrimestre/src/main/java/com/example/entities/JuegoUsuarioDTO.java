@@ -5,62 +5,111 @@ import java.util.List;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
 public class JuegoUsuarioDTO {
-	
+
 	@Id
+	@GeneratedValue
 	private Long idUser;
-	
+
+	private Long idSql;
+
 	@ElementCollection
 	private List<Long> listaJuegosUsuario;
-	
-	private Long idJuego;
-	
+
 	public JuegoUsuarioDTO() {
-		this.listaJuegosUsuario = new ArrayList<>();
-		
 	}
- 
-	public JuegoUsuarioDTO(Long idUser, List<Long> listaJuegosUsuario, Long idJuego) {
+
+	public JuegoUsuarioDTO(Long idUser, Long idSql, List<Long> listaJuegosUsuario) {
 		this.idUser = idUser;
-		this.listaJuegosUsuario = listaJuegosUsuario;
-		this.idJuego = idJuego;
+		this.idSql = idSql;
+        this.listaJuegosUsuario = (listaJuegosUsuario != null) ? listaJuegosUsuario : new ArrayList<Long>();
 	}
-	
+
 	@OneToMany
-	@JoinColumn(name = "idJuegos")
-	public Juego juegos;
- 
+	@JoinColumn(name = "idJuego")
+	public Long idJuego;
+
 	public Long getIdUser() {
 		return idUser;
 	}
- 
+
 	public void setIdUser(Long idUser) {
 		this.idUser = idUser;
 	}
- 
+
 	public List<Long> getListaJuegosUsuario() {
 		return listaJuegosUsuario;
 	}
- 
+
 	public void setListaJuegosUsuario(List<Long> listaJuegosUsuario) {
 		this.listaJuegosUsuario = listaJuegosUsuario;
 	}
-	
 
-	public Long getIdJuego() {
-		return idJuego;
+	public Long getIdSql() {
+		return idSql;
 	}
+
+	public void setIdSql(Long idSql) {
+		this.idSql = idSql;
+	}
+
+	
+	public Long getIdJuego() { 
+		return idJuego; 
+	
+	}	 
 
 	public void setIdJuego(Long idJuego) {
 		this.idJuego = idJuego;
 	}
 
-	public void agregarJuego(Long idJuego) {
-        this.listaJuegosUsuario.add(idJuego);
-    }
+	// Metodo para devolver el ID del juego
+	public boolean recorreLista(Long id) {
+
+		JuegoUsuarioDTO recorreLista = new JuegoUsuarioDTO();
+		recorreLista.getListaJuegosUsuario();
+		
+		boolean result = false;
+
+	    if (listaJuegosUsuario != null && !listaJuegosUsuario.isEmpty()) {
+	    	
+	        for (Long juegoId : listaJuegosUsuario) {
+	        	
+	            if (juegoId.equals(id)) {
+	                result = true;
+	                
+	                break; 
+	            }
+	        }
+	    }
+		
+		return result;
+
+	}
+
+	// Metodo para agregar el juego a la lista del usuario
+	public void agregarJuegoAListaUsuario(Long id) {
+		this.listaJuegosUsuario.add(id);
+		
+		System.out.println("Agregado el juego a la lista de usuario");
+	}
+	
+	// Metodo para mostrar la lista de cada usuario
+	public void muestraLista() {
+		
+		JuegoUsuarioDTO recorreLista = new JuegoUsuarioDTO();
+		recorreLista.getListaJuegosUsuario();
+		
+		for (int i = 0; i <= recorreLista.getListaJuegosUsuario().size(); i++) {
+			System.out.println(recorreLista.getListaJuegosUsuario().get(i));
+			
+		}
+		
+	}
 }

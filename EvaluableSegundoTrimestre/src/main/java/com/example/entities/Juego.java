@@ -14,10 +14,11 @@ public class Juego {
 	private Long idJuego;
 	
 	private String titulo;
-	private String genero;	
-	private Long idUsuario;
+	private String genero;
+	
+	public Juego() {}
  
-	public Juego() {
+	public Juego(String titulo, String genero) {
  
 	}
  
@@ -30,7 +31,7 @@ public class Juego {
 	
 	@OneToMany
 	@JoinColumn(name = "idUser")
-	public JuegoUsuarioDTO juegoUsuario;
+	public JuegoUsuarioDTO idUser;
  
 	public Long getIdJuego() {
 		return idJuego;
@@ -57,11 +58,4 @@ public class Juego {
 		this.genero = genero;
 	}
  
-	public Long getIdUsuario() {
-		return idUsuario;
-	}
- 
-	public void setIdUsuario(Long idUsuario) {
-		this.idUsuario = idUsuario;
-	}
 }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.entities.JuegoUsuarioDTO;
 import com.example.repository.ObjectDBRepository;
 
 @Service
@@ -16,8 +17,13 @@ public class ObjectDBService {
 	private String email;
 	private String titulo;
 	private String genero;
+	private Long id;
+	private JuegoUsuarioDTO usuarioObject;
+	
 
-	public void juegosAsociados(String email, String titulo, String genero) throws SQLException {
+	public ObjectDBService() {}
+	
+	public void juegoAsociado(String email, String titulo, String genero) throws Exception {
 		
 		// Creamos un objeto que vaya a coger los parámetros
 		ObjectDBService so = new ObjectDBService();
@@ -31,7 +37,7 @@ public class ObjectDBService {
 		so.setGenero(genero);
 
 		// Lo mandamos al repositorio
-		repositoryBBDD.juegosAsociados(so);
+		repositoryBBDD.juegoAsociado(so, usuarioObject);
 
 	}
 	
@@ -83,7 +89,7 @@ public class ObjectDBService {
 		repositoryBBDD.existeUsuarioObject(so);
 
 	}
-
+	
 
 	public String getEmail() {
 		return this.email;
@@ -107,6 +113,19 @@ public class ObjectDBService {
 
 	public void setGenero(String genero) {
 		this.genero = genero;
+	}
+	
+	
+	
+	
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }
