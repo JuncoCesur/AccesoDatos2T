@@ -24,6 +24,7 @@ public class ExistDBRepository {
 		
     private static String URI = "xmldb:exist://localhost:8080/exist/xmlrpc";
 
+    // Metodo para conectar con la base de datos ExistDB
     public XPathQueryService obtenerServicioXPath() throws Exception {
         String driver = "org.exist.xmldb.DatabaseImpl"; //Driver
         Class cl = Class.forName(driver);//Cargar el driver
@@ -40,21 +41,28 @@ public class ExistDBRepository {
         return service;
     }
     
+    // Metodo para listar tanto usuarios como juegos 
     public String listado() {
+    	
         try {    
+        	
             XPathQueryService service = obtenerServicioXPath();
 
-            //Consulta a lanzar
+            //Consulta para mostrar los usuarios
             ResourceSet result = service.query("doc('SegundaEvaluacion/XMLAccesoDatos')//usuarios");
             ResourceIterator i = result.getIterator();
+            
             while (i.hasMoreResources()) { //Procesamos el resultado
                 Resource r = i.nextResource();
                 String xml = (String) r.getContent();
                 System.out.println(xml);                                             
                 }
             
+            //Consulta para mostrar los juegos
+
             ResourceSet result2 = service.query("doc('SegundaEvaluacion/XMLAccesoDatosJuegos')//juegos");
             ResourceIterator i2 = result2.getIterator();
+            
             while (i2.hasMoreResources()) { //Procesamos el resultado
                 Resource r = i2.nextResource();
                 String xml = (String) r.getContent();
@@ -68,15 +76,14 @@ public class ExistDBRepository {
         return "OK";
     }
   
-    
-    public String insertar(ExistJuegoUsuarioDTO usuarioExist, ExistDBService usuario, ExistJuego juegoExist) throws Exception {
-
+    // Metodo para isertar tanto usuarios como juegos en ExistDB
+    public String insertar(ExistJuegoUsuarioDTO usuarioExist, ExistDBService usuario) throws Exception {
     	
-    	    // Construir la consulta de inserción según la estructura del usuario
-    	    String sQuery = construirConsultaInsercionUsuario(usuarioExist, usuario, juegoExist);
-    	    String sQuery2 = construirConsultaInsercionJuego(usuarioExist, usuario, juegoExist);
+    	    // Contruimos la query para insertar usuario y juego
+    	    String sQuery = construirConsultaInsercionUsuario(usuarioExist);
+    	    String sQuery2 = construirConsultaInsercionJuego(usuarioExist);
 
-    	    // Ejecutar la consulta en ExistDB
+    	    // Ejecutamos la consulta en ExistDB
     	    XPathQueryService service = obtenerServicioXPath();
     	    service.query(sQuery);     	
     	    service.query(sQuery2);
@@ -84,42 +91,42 @@ public class ExistDBRepository {
         return "OK";
     }
     
-	public String construirConsultaInsercionUsuario(ExistJuegoUsuarioDTO usuarioExist, ExistDBService usuario, ExistJuego juegoExist) {
-	    // Aquí construyes la consulta XQuery de inserción utilizando los datos del usuario
-	    String sQuery = "update insert " + usuarioToXML(usuarioExist, usuario, juegoExist) +
+    // Metodo para construir la query para la insercion de usuarios
+	public String construirConsultaInsercionUsuario(ExistJuegoUsuarioDTO usuarioExist) {
+	    String sQuery = "update insert " + usuarioToXML(usuarioExist) +
 	                   " into doc('SegundaEvaluacion/XMLAccesoDatos')/plataforma";
 	    return sQuery;
 	}
 	
-	public String construirConsultaInsercionJuego(ExistJuegoUsuarioDTO usuarioExist, ExistDBService usuario, ExistJuego juegoExist) {
-	    // Aquí construyes la consulta XQuery de inserción utilizando los datos del usuario
-	    String sQuery2 = "update insert " + juegoToXML(usuarioExist, usuario, juegoExist) +
+    // Metodo para construir la query para la insercion de juegos
+	public String construirConsultaInsercionJuego(ExistJuegoUsuarioDTO usuarioExist) {
+	    String sQuery2 = "update insert " + juegoToXML(usuarioExist) +
 	                   " into doc('SegundaEvaluacion/XMLAccesoDatosJuegos')/juegos";
 	    return sQuery2;
 	}
 
-	private String usuarioToXML(ExistJuegoUsuarioDTO usuarioExist, ExistDBService usuario, ExistJuego juegoExist) {
+	// Metodo para construir el xml de los usuarios
+	private String usuarioToXML(ExistJuegoUsuarioDTO usuarioExist) {
 	    // Aquí conviertes el objeto Usuario a una representación XML para la inserción
 	    // Puedes usar JAXB o construir manualmente la cadena XML
 	    // Por simplicidad, asumimos que JAXB se utiliza para convertir el usuario a XML
 	    // y devolvemos la cadena XML resultante.
 		long nowMillis = System.currentTimeMillis();
 		
-	    return "<usuarios><usuario><idSql>" + usuarioExist.getIdSql() + usuario.getIdSql() + "</idSql><idJuego>" + usuarioExist.getIdJuego() + usuario.getIdJuego() + "</idJuego></usuario></usuarios>";
+	    return "<usuarios><usuario><idSql>" + usuarioExist.getIdSql() + "</idSql><idJuego>" + usuarioExist.getIdJuego() + "</idJuego></usuario></usuarios>";
 	}
 	
-	private String juegoToXML(ExistJuegoUsuarioDTO usuarioExist, ExistDBService usuario, ExistJuego juegoExist) {
+	// Metodo para construir el xml de los juegos
+	private String juegoToXML(ExistJuegoUsuarioDTO usuarioExist) {
 	    // Aquí conviertes el objeto Usuario a una representación XML para la inserción
 	    // Puedes usar JAXB o construir manualmente la cadena XML
 	    // Por simplicidad, asumimos que JAXB se utiliza para convertir el usuario a XML
 	    // y devolvemos la cadena XML resultante.
 		long nowMillis = System.currentTimeMillis();
 		
-	    return "<juego><idJuego>" + usuarioExist.getIdJuego() + "</idJuego><titulo>" + juegoExist.getTitulo() + "</titulo><genero>" + juegoExist.getGenero() + "</genero></juego>";
+	    return "<juego><idJuego>" + usuarioExist.getIdJuego() + "</idJuego><titulo>" + "</titulo><genero>" + "</genero></juego>";
 	}
-	
-	
-    
+  
     
     
 }

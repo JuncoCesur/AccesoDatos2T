@@ -54,7 +54,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 		protected ExistDBService conexionService;
 	    
 		// Metodo para crear el usuario de ExistDB
-	    public void llamarMetodoInsertar(JuegoUsuarioDTO usuarioObject) throws Exception {
+	    public ExistJuegoUsuarioDTO llamarMetodoInsertar(JuegoUsuarioDTO usuarioObject) throws Exception {
 	    	
 	    	ExistJuegoUsuarioDTO usuarioExist = new ExistJuegoUsuarioDTO();
 
@@ -64,7 +64,8 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 	    	usuarioExist.setIdSql(idSqlObject);
 	    	usuarioExist.setIdJuego(idJuego);
 	    	
-	    	conexionService.insertar(null, null, usuarioExist, null);	    	
+	    	return usuarioExist;
+	    	
 	    }
 	   
 	}
