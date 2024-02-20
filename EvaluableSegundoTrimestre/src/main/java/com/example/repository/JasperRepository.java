@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -26,18 +28,15 @@ import net.sf.jasperreports.export.SimplePdfReportConfiguration;
 public class JasperRepository {
 
 	private List<Juego> obtenerJuegos() {
-		List<Juego> lista = new ArrayList<Juego>();
+		
+		ObjectDBRepository obtenerJuego = new ObjectDBRepository();
+		obtenerJuego.conectar();
 
-		lista.add(new Juego("Tomb Raider", "Aventura"));
-		lista.add(new Juego("Rocket League", "Deporte"));
-		lista.add(new Juego("League of Legend", "Competitivo"));
-		lista.add(new Juego("Elden Ring", "Aventura"));
-		lista.add(new Juego("World of Warcraft", "Competitivo"));
-		lista.add(new Juego("Faraón", "Construcción"));
+		// Insertamos la query para coger todos los juegos que hay
+		TypedQuery<Juego> query = obtenerJuego.em.createQuery("SELECT j FROM Juego j", Juego.class);
+		List<Juego> results = query.getResultList();
 
-
-
-		return lista;
+		return results;
 	}
 
 	public boolean generarInforme() {
@@ -54,7 +53,7 @@ public class JasperRepository {
 		try {
 			empReport = JasperFillManager.fillReport(
 							JasperCompileManager.compileReport(
-									ResourceUtils.getFile("reports/Informe.jrxml").getAbsolutePath()),
+									ResourceUtils.getFile("reports/InformeJuegos.jrxml").getAbsolutePath()),
 							empParams, 
 							new JRBeanCollectionDataSource(lista)
 					);

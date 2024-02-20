@@ -36,7 +36,7 @@ public class ExistDBController {
     @PutMapping("/insertar")
     @ResponseBody
     public String insertar(@RequestParam Long idSql, @RequestParam Long idJuego, ExistJuegoUsuarioDTO usuario) throws Exception {
-        return conexionService.insertar(idSql, idJuego, usuario);
+        return conexionService.insertar(idSql, idJuego, usuario, null);
     }
 
 }
