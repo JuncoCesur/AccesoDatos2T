@@ -36,6 +36,7 @@ public class ObjectDBService {
 		so.setTitulo(titulo);
 		so.setGenero(genero);
 
+		usuarioObject = new JuegoUsuarioDTO();
 		// Lo mandamos al repositorio
 		repositoryBBDD.juegoAsociado(so, usuarioObject);
 

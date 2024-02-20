@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import com.example.entities.JuegoUsuarioDTO;
+import com.example.entities.ExistJuego;
 import com.example.entities.ExistJuegoUsuarioDTO;
 import com.example.entities.Juego;
 import com.example.service.ObjectDBService;
@@ -54,7 +55,7 @@ public class ObjectDBRepository {
 
 		} else {
 			// Si existe, llamamos al metodo para devolver el idUser del idSql aportado
-			encontrarUsuarioObject(so);
+			usuarioObject = encontrarUsuarioObject(so);
 
 		}
 
@@ -76,23 +77,24 @@ public class ObjectDBRepository {
 		// Si es necesario añadir el juego
 		if (confirmarAgregarJuegoAListaUsuario) {
 			usuarioObject.agregarJuegoAListaUsuario(idJuego);
+			usuarioObject.setIdJuego(idJuego);
 
 			// Lo insertamos en la base de datos ObjectDB
 			em.persist(usuarioObject);
-			
-			// Metodo para insertar en ExistDB tras haber creado el usuario en ObjectDB
-			ExistJuegoUsuarioDTO usuarioExist = new ExistJuegoUsuarioDTO();
-			usuarioExist.llamarMetodoInsertar(usuarioObject);
-			
-		} else {
-			System.out.println("El juego ya se encuentra en la lista de usuario");
-			
-		}
-
+					
+		} 
+		
 		em.getTransaction().commit();
 
 		// Cerramos conexiones
 		em.close();
+		
+		// Metodo para insertar en ExistDB tras haber creado el usuario en ObjectDB
+		ExistJuegoUsuarioDTO usuarioExist = new ExistJuegoUsuarioDTO();
+		ExistJuegoUsuarioDTO existUser = usuarioExist.llamarMetodoInsertar(usuarioObject);
+		ExistDBRepository repository = new ExistDBRepository();
+		ExistJuego juego = new ExistJuego();
+		repository.insertar(existUser, null);
  
 		return "Hecho";
 
@@ -126,7 +128,7 @@ public class ObjectDBRepository {
 	}
 
 	// Metodo para encontrar el usuario y devolver su idUser
-	public Long encontrarUsuarioObject(ObjectDBService so) throws SQLException {
+	public JuegoUsuarioDTO encontrarUsuarioObject(ObjectDBService so) throws SQLException {
 
 		// Obtenemos primero el ID de MySql llamando al siguiente metodo
 		Long valor = obtenerId(so);
@@ -137,7 +139,7 @@ public class ObjectDBRepository {
 				.getResultList();
 
 		// Retornamos la ID de ObjectDB
-		return usuario.get(0).getIdUser();
+		return usuario.get(0);
 
 	}
 
@@ -212,7 +214,6 @@ public class ObjectDBRepository {
 
 		// Metemos el ID en una variable para retornarla
 		Long idJuegoEncontrado = ids.get(0);
-		System.out.println(idJuegoEncontrado);
 
 		return idJuegoEncontrado;
 	}
@@ -303,7 +304,7 @@ public class ObjectDBRepository {
 	// Metodo para verificar si el usuario tiene una lista creada
 	public boolean verificaListaJuegos(ObjectDBService so, Long idJuego, JuegoUsuarioDTO usuarioObject) {
 
-		JuegoUsuarioDTO verificador = new JuegoUsuarioDTO();
+		JuegoUsuarioDTO verificador = usuarioObject;
 
 		boolean confirmarAgregarJuegoAListaUsuario = false;
 
