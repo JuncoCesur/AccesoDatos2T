@@ -23,8 +23,8 @@ import com.example.service.ObjectDBService;
 @Repository
 public class ObjectDBRepository {
 
-	private EntityManagerFactory emf;
-	private EntityManager em;
+	EntityManagerFactory emf;
+	EntityManager em;
 
 	public void conectar() {
 
