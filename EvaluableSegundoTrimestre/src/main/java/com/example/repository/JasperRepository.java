@@ -49,6 +49,8 @@ public class JasperRepository {
 		
 		Map<String, Object> empParams = new HashMap<String, Object>();
 		empParams.put("titulo", "Informe de Juegos");
+		empParams.put("url_flor", "flower1.png");
+		
 		JasperPrint empReport;
 		try {
 			empReport = JasperFillManager.fillReport(

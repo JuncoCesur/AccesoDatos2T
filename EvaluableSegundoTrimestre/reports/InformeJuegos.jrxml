@@ -16,10 +16,11 @@
 	</style>
 	<subDataset name="PieChartDataset" uuid="39581794-7f4c-48d6-8f6a-b421776f515c"/>
 	<parameter name="titulo" class="java.lang.String"/>
+	<parameter name="url_flor" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="tituloJuegos" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
 	<field name="genero" class="java.lang.String"/>
 	<background>
 		<band height="9" splitType="Stretch"/>
@@ -73,13 +74,13 @@
 				<reportElement x="0" y="70" width="150" height="147" uuid="fdc83025-e841-44e3-a893-483c783bcb02">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA["flower1.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{url_flor}]]></imageExpression>
 			</image>
 			<image>
 				<reportElement x="-1" y="22" width="152" height="152" uuid="847f1a8b-e48a-47b2-85db-1279aa8de550">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA["flower1.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{url_flor}]]></imageExpression>
 			</image>
 		</band>
 	</detail>
