@@ -2,13 +2,12 @@ package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.entities.ExistJuego;
 import com.example.entities.ExistJuegoUsuarioDTO;
 import com.example.service.ExistDBService;
 
@@ -38,5 +37,13 @@ public class ExistDBController {
     public String insertar(@RequestParam Long idSql, @RequestParam Long idJuego, ExistJuegoUsuarioDTO usuario) throws Exception {
         return conexionService.insertar(idSql, idJuego, usuario, null);
     }
+    
+    //Junco
+    @PutMapping("/modificar")
+    @ResponseBody
+    public String modificarNombre(@RequestParam("id") Long id, @RequestParam("nuevoNombre") String nuevoNombre) throws Exception {
+        return conexionService.modificarNombre(id, nuevoNombre);
+    }
+
 
 }
