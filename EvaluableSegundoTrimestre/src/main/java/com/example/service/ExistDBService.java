@@ -38,6 +38,11 @@ public class ExistDBService {
 		return repositoryBBDD.listado();
 
 	}
+	// Junco
+	public String modificarNombre(Long id, String nuevoNombre) throws Exception {
+	    return repositoryBBDD.modificarNombre(id, nuevoNombre);
+	}
+
 
 	public Long getIdSql() {
 		return idSql;

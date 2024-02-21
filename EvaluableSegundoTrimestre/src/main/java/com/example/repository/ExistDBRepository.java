@@ -126,6 +126,19 @@ public class ExistDBRepository {
 		
 	    return "<juego><idJuego>" + usuarioExist.getIdJuego() + "</idJuego><titulo>" + juego.getTitulo() + "</titulo><genero>" + juego.getGenero() + "</genero></juego>";
 	}
+	
+	//Junco
+	public String modificarNombre(Long id, String nuevoNombre) throws Exception {
+	    // Construir la consulta de modificación del nombre
+	    String sQuery = "update value doc('SegundaEvaluacion/XMLAccesoDatos')/plataforma[@idSql='" + id + "']/nombre with '" + nuevoNombre + "'";
+	    
+	    // Ejecutar la consulta en ExistDB
+	    XPathQueryService service = obtenerServicioXPath();
+	    service.query(sQuery);
+	    
+	    return "OK";
+	}
+
   
     
     

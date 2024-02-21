@@ -25,8 +25,9 @@ import net.sf.jasperreports.export.SimplePdfReportConfiguration;
 @Repository
 public class JasperRepository {
 
+	List<Juego> lista = obtenerJuegos();
+	
 	private List<Juego> obtenerJuegos() {
-		List<Juego> lista = new ArrayList<Juego>();
 
 		lista.add(new Juego("Tomb Raider", "Aventura"));
 		lista.add(new Juego("Rocket League", "Deporte"));
@@ -45,7 +46,7 @@ public class JasperRepository {
 		long nowMillis = System.currentTimeMillis();
         String nombreFichero = "test " + nowMillis + ".pdf";
 		
-        List<Juego> lista = obtenerJuegos();
+        //List<Juego> lista = obtenerJuegos();
 		
 		
 		Map<String, Object> empParams = new HashMap<String, Object>();
