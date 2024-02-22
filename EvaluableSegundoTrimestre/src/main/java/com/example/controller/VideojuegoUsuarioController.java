@@ -18,13 +18,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.entities.CaratulaJuego;
 import com.example.entities.VideojuegoUsuario;
+import com.example.service.ExistDBService;
 import com.example.service.VideojuegoUsuarioService;
 
 @Controller
 @RequestMapping("/videojuegos-usuarios")
 public class VideojuegoUsuarioController {
+	
 	@Autowired
 	private VideojuegoUsuarioService videojuegoUsuarioService;
+	
+	/**
+	 * Guardamos, eliminamos y obtenemos objetos en MongoDB
+	 * 
+	 *
+	 * @author Junco
+	 * @see VideojuegoUsuarioService
+	 */
 
 	@GetMapping("/obtenerTodos")
 	@ResponseBody
@@ -50,7 +60,16 @@ public class VideojuegoUsuarioController {
 		return "Eliminado con exito";
 	}
 
-	// Metodo para 
+	/**
+	 * Insertamos y mostramos las caratulas de los juegos de la lista
+	 * 
+	 *
+	 * @author Patricia
+	 * @see VideojuegoUsuarioService
+	 */
+	
+	
+	// Metodo para cargar una caratula y guardarla en MongoDB
 	@PostMapping("/upload")
 	@ResponseBody
 	public String handleFileUpload(@RequestParam("file") MultipartFile file) {
@@ -74,6 +93,7 @@ public class VideojuegoUsuarioController {
 	    }
 	}
 	
+	// Metodo para visualizar la caratula
     @GetMapping("/caratula/{id}")
     public ResponseEntity<byte[]> obtenerImagenCaratula(@PathVariable String id) {
         byte[] imagenBytes = videojuegoUsuarioService.obtenerDatosBinarios(id);

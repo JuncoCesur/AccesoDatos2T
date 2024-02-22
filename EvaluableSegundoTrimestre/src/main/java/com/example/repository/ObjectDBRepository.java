@@ -18,6 +18,7 @@ import com.example.entities.JuegoUsuarioDTO;
 import com.example.entities.ExistJuego;
 import com.example.entities.ExistJuegoUsuarioDTO;
 import com.example.entities.Juego;
+import com.example.service.ExistDBService;
 import com.example.service.ObjectDBService;
 
 @Repository
@@ -37,6 +38,14 @@ public class ObjectDBRepository {
 		em.close();
 		emf.close();
 	}
+	
+	/**
+	 * Conectamos e interactuamos con usuarios y juegos
+	 * de la base de datos de ObjectDB
+	 *
+	 * @author Patricia
+	 * @see ObjectDBRepository
+	 */
 
 	// Metodo para insertar un juego a un usuario de ObjectDB
 	public String juegoAsociado(ObjectDBService so, JuegoUsuarioDTO usuarioObject) throws Exception {

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.entities.ExistJuegoUsuarioDTO;
+import com.example.service.BBDDService;
 import com.example.service.ExistDBService;
 
 
@@ -18,6 +19,14 @@ public class ExistDBController {
 	
 	@Autowired
 	protected ExistDBService conexionService;
+	
+	/**
+	 * Conectamos e interactuamos con objetos de la base de datos de ExistDB
+	 * 
+	 *
+	 * @author Patricia
+	 * @see ExistDBService
+	 */
 	
 	@ResponseBody
 	@PostMapping ("/conectar")
@@ -38,7 +47,13 @@ public class ExistDBController {
         return conexionService.insertar(idSql, idJuego, usuario, null);
     }
     
-    //Junco
+	/**
+	 * Modificacion de objetos en la base de datos ExistDB
+	 *
+	 * @author Junco
+	 * @see ExistDBService
+	 */
+
     @PutMapping("/modificar")
     @ResponseBody
     public String modificarNombre(@RequestParam("id") Long id, @RequestParam("nuevoNombre") String nuevoNombre) throws Exception {

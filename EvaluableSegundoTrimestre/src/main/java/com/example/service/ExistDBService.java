@@ -12,12 +12,19 @@ public class ExistDBService {
 	
 	@Autowired
 	protected ExistDBRepository repositoryBBDD;
+	
+	/**
+	 * Conectamos e interactuamos con objetos de la base de datos de ExistDB
+	 * 
+	 *
+	 * @author Patricia
+	 * @see ExistDBRepository
+	 */
 
 	private Long idSql;
 	private Long idJuego;
 	
 	public void obtenerServicioXPath() throws Exception {
-		// Lo mandamos al repositorio
 		repositoryBBDD.obtenerServicioXPath();
 
 	}

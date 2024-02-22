@@ -13,6 +13,14 @@ public class ObjectDBService {
 	
 	@Autowired
 	protected ObjectDBRepository repositoryBBDD;
+	
+	/**
+	 * Conectamos e interactuamos con usuarios y juegos
+	 * de la base de datos de ObjectDB
+	 *
+	 * @author Patricia
+	 * @see ObjectDBRepository
+	 */
 
 	private String email;
 	private String titulo;
@@ -115,11 +123,6 @@ public class ObjectDBService {
 	public void setGenero(String genero) {
 		this.genero = genero;
 	}
-	
-	
-	
-	
-	
 	
 	public Long getId() {
 		return id;

@@ -14,7 +14,7 @@ public class BBDDService {
 	/**
 	 * El service que crea la conexion para el resto del proyecto
 	 *
-	 * @author Junco
+	 * @author Junco y Patricia
 	 * @see BBDDRepository#llamarBaseDatos(), BBDDController#llamarBaseDatos()
 	 */
  
@@ -26,7 +26,7 @@ public class BBDDService {
 	/**
 	 * El service de creacion de tablas
 	 *
-	 * @author Patricia
+	 * @author Patricia y Junco
 	 * @see BBDDRepository#crearTablas(), BBDDController#llamarBaseDatos()
 	 */
  
