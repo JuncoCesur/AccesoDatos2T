@@ -76,9 +76,14 @@ public class VideojuegoUsuarioController {
 
 	    if (!file.isEmpty()) {
 	        try {
-
+	        	
+	        	// Metemos los bytes en un array de bytes
 	            byte[] fileData = file.getBytes();
+	            
+	            // El nombre del archivo se mete en una variable string
 	            String fileName = file.getOriginalFilename();
+	            
+	            // Tanto el nombre como los bytes se pasan al service
 	            videojuegoUsuarioService.agregarCaratula(fileName, fileData);
 
 	            return "Archivo cargado y guardado exitosamente en la base de datos.";
@@ -96,7 +101,11 @@ public class VideojuegoUsuarioController {
 	// Metodo para visualizar la caratula
     @GetMapping("/caratula/{id}")
     public ResponseEntity<byte[]> obtenerImagenCaratula(@PathVariable String id) {
+    	
+    	// Obtenemos el array de bytes segun la id aportada
         byte[] imagenBytes = videojuegoUsuarioService.obtenerDatosBinarios(id);
+        
+        // Si no es null, dicho array lo convertimos en jpeg
         if (imagenBytes != null) {
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)

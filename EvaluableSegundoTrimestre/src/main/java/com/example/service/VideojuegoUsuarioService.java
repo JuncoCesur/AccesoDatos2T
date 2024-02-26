@@ -111,7 +111,7 @@ public class VideojuegoUsuarioService {
 	// Método para obtener los datos binarios de la imagen desde MongoDB
 	public byte[] obtenerDatosImagenDesdeMongoDB(String id) {
 
-		// Buscamos en el repository la id aportada
+		// Buscamos en el repository la ID aportada
 		Optional<CaratulaJuego> optionalArchivo = caratulaRepository.findById(id);
 
 		// Si la encuentra, obtenemos la imagen
