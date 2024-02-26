@@ -70,9 +70,9 @@ public class VideojuegoUsuarioController {
 	
 	
 	// Metodo para cargar una caratula y guardarla en MongoDB
-	@PostMapping("/upload")
+	@PostMapping("/cargar")
 	@ResponseBody
-	public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+	public String cargarCaratula(@RequestParam("file") MultipartFile file) {
 
 	    if (!file.isEmpty()) {
 	        try {
