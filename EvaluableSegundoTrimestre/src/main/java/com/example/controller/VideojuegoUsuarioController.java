@@ -20,19 +20,43 @@ import com.example.entities.CaratulaJuego;
 import com.example.entities.VideojuegoUsuario;
 import com.example.service.VideojuegoUsuarioService;
 
+// Controlador para trabajar con MongoDB
 @Controller
 @RequestMapping("/videojuegos-usuarios")
 public class VideojuegoUsuarioController {
 	@Autowired
 	private VideojuegoUsuarioService videojuegoUsuarioService;
 
-	@GetMapping("/obtenerTodos")
+	// Método para obtener todos los usuarios asociados a la id de un juego.
+	@GetMapping("/obtenerJuegoPorId")
 	@ResponseBody
 	public List<VideojuegoUsuario> obtenerTodos(@RequestParam String _id) {
-		System.out.println(_id);
+		//Devuelve una lista
 		return videojuegoUsuarioService.obtenerPorId(_id);
 	}
+	
+    // Método para obtener usuarios por nombre de juego.
+    @GetMapping("/obtenerPorNombre")
+    @ResponseBody
+    public List<VideojuegoUsuario> obtenerPorNombre(@RequestParam String nombre) {
+        return videojuegoUsuarioService.obtenerPorNombre(nombre);
+    }
 
+    // Método para obtener usuarios por género de juego.
+    @GetMapping("/obtenerPorGenero")
+    @ResponseBody
+    public List<VideojuegoUsuario> obtenerPorGenero(@RequestParam String genero) {
+        return videojuegoUsuarioService.obtenerPorGenero(genero);
+    }
+
+    // Método para obtener usuarios por ID de usuario.
+    @GetMapping("/obtenerPorIdUsuario")
+    @ResponseBody
+    public List<VideojuegoUsuario> obtenerPorIdUsuario(@RequestParam Long idUsuario) {
+        return videojuegoUsuarioService.obtenerPorIdUsuario(idUsuario);
+    }
+
+	// Método para guardar un juego asociado a un usuario. 
 	@PostMapping("/guardar")
 	@ResponseBody
 	public String guardar(@RequestParam String id, @RequestParam String nombre, @RequestParam String genero,
@@ -43,6 +67,7 @@ public class VideojuegoUsuarioController {
 		return "Guardado con exito";
 	}
 
+	// Método para eliminar juegos por id
 	@GetMapping("/eliminar")
 	@ResponseBody
 	public String eliminar(@RequestParam String id) {

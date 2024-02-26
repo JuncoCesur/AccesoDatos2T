@@ -2,7 +2,6 @@ package com.example.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,11 +38,23 @@ public class ExistDBController {
     }
     
     //Junco
-    @PutMapping("/modificar")
+//    @PutMapping("/modificar")
+//    @ResponseBody
+//    public String modificarNombre(@RequestParam("id") Long id, @RequestParam("nuevoNombre") String nuevoNombre) throws Exception {
+//        return conexionService.modificarNombre(id, nuevoNombre);
+//    }
+    
+    //Método para insertar de manera directa en ExistsDB
+    //El insertar hecho por mi compañera pasaba primero obligatoriamente a ObjetcDB
+    @PostMapping("/insertarDirecto")
     @ResponseBody
-    public String modificarNombre(@RequestParam("id") Long id, @RequestParam("nuevoNombre") String nuevoNombre) throws Exception {
-        return conexionService.modificarNombre(id, nuevoNombre);
+    public String insertarDirecto(@RequestParam("idSql") Long idSql, @RequestParam("idJuego") Long idJuego) throws Exception {
+        ExistJuegoUsuarioDTO usuario = new ExistJuegoUsuarioDTO();
+        usuario.setIdSql(idSql);
+        usuario.setIdJuego(idJuego);
+        return conexionService.insertarDirecto(usuario);
     }
+
 
 
 }

@@ -91,6 +91,12 @@ public class ObjectDBService {
 
 	}
 	
+	public void eliminarJuegoYUsuario(Long idJuego, Long idUsuario) {
+	    repositoryBBDD.eliminarJuego(idJuego);
+	    repositoryBBDD.eliminarUsuario(idUsuario);
+	}
+
+	
 
 	public String getEmail() {
 		return this.email;

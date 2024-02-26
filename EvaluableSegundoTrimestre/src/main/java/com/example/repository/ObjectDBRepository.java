@@ -347,4 +347,43 @@ public class ObjectDBRepository {
 
 		return confirmarAgregarJuegoAListaUsuario;
 	}
+	
+	// Metodo para eliminar un juego de la base de datos ObjectDB
+	public void eliminarJuego(Long idJuego) {
+	    conectar();
+	    //Se inicia la transacción
+	    em.getTransaction().begin();
+	    Juego juego = em.find(Juego.class, idJuego);
+	    //Se comprueba que el usuario existe
+	    if (juego != null) {
+	    	//Se borra caso de que exista
+	        em.remove(juego);
+	        System.out.println("Juego eliminado correctamente");
+	    } else {
+	        System.out.println("No se encontró ningún juego con el ID proporcionado");
+	    }
+	    //Se hace un commit a la transacción
+	    em.getTransaction().commit();
+	    cerrar();
+	}
+
+	// Método para eliminar un usuario de la base de datos ObjectDB
+	public void eliminarUsuario(Long idUsuario) {
+	    conectar();
+	    //Se inicia la transacción
+	    em.getTransaction().begin();
+	    JuegoUsuarioDTO usuario = em.find(JuegoUsuarioDTO.class, idUsuario);
+	    //Se comprueba que el usuario existe
+	    if (usuario != null) {
+	    	//Se borra caso de que exista
+	        em.remove(usuario);
+	        System.out.println("Usuario eliminado correctamente");
+	    } else {
+	        System.out.println("No se encontró ningún usuario con el ID proporcionado");
+	    }
+	    //Se hace un commit a la transacción
+	    em.getTransaction().commit();
+	    cerrar();
+	}
+
 }

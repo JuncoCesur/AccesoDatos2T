@@ -45,4 +45,12 @@ public class ObjectDBController {
 		public void mostrar() {
 			conexionService.mostrar();
 		}
+	// Método para eliminar al mismo tiempo un juego y su usuario 
+	// De las entidades Juego y JuegoUsuarioDTO
+	@ResponseBody
+	@PostMapping("/eliminarJuegoYUsuario")
+	public void eliminarJuegoYUsuario(@RequestParam Long idJuego, @RequestParam Long idUsuario) {
+	    conexionService.eliminarJuegoYUsuario(idJuego, idUsuario);
+	}
+
 }

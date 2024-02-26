@@ -17,6 +17,7 @@ import com.example.entities.VideojuegoUsuario;
 import com.example.repository.CaratulaJuegoRepository;
 import com.example.repository.VideojuegoUsuarioRepository;
 
+// Service para trabajar con MongoDB
 @Service
 public class VideojuegoUsuarioService {
 
@@ -29,6 +30,7 @@ public class VideojuegoUsuarioService {
 		return videojuegoUsuarioRepository.findAll();
 	}
 
+	//Los métodos son autoexplicativos
 	public List<VideojuegoUsuario> obtenerPorId(String _id) {
 		return videojuegoUsuarioRepository.findAllById(_id);
 	}

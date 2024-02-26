@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import com.example.entities.VideojuegoUsuario;
 
 public interface VideojuegoUsuarioRepository extends MongoRepository<VideojuegoUsuario, String> {
-
+	//De nuevo, son autoexplicativos
     @Query("{ 'id' : ?0 }")
     List<VideojuegoUsuario> findAllById(String _id);
 
