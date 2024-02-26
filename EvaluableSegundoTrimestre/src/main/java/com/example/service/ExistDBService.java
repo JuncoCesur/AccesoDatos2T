@@ -53,7 +53,11 @@ public class ExistDBService {
 	public String insertarDirecto(ExistJuegoUsuarioDTO usuario) throws Exception {
 	    return repositoryBBDD.insertarDirecto(usuario);
 	}
-
+	
+	
+   public String calcularJuegosDeCadaUsuario() {
+        return repositoryBBDD.calcularJuegosDeCadaUsuario();
+    }
 
 
 	public Long getIdSql() {
