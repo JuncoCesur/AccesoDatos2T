@@ -138,7 +138,7 @@ public class ObjectDBRepository {
 		} else {
 			System.out.println("No se encontró ningún usuario con el ID proporcionado.");
 
-			// Retornamos la ID de ObjectDB
+			// Retornamos false
 			return false;
 		}
 	}
