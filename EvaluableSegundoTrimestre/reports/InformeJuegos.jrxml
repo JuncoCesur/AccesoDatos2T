@@ -16,21 +16,29 @@
 	</style>
 	<subDataset name="PieChartDataset" uuid="39581794-7f4c-48d6-8f6a-b421776f515c"/>
 	<parameter name="titulo" class="java.lang.String"/>
-	<parameter name="url_flor" class="java.lang.String"/>
+	<parameter name="url_starCraft" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<field name="titulo" class="java.lang.String"/>
 	<field name="genero" class="java.lang.String"/>
 	<background>
-		<band height="9" splitType="Stretch"/>
+		<band height="448" splitType="Stretch">
+			<image rotation="Left">
+				<reportElement x="-1" y="120" width="108" height="328" uuid="2ae2d1da-ff2a-405a-80ff-44c787903a49"/>
+				<imageExpression><![CDATA["starcraft.png"]]></imageExpression>
+			</image>
+		</band>
 	</background>
 	<title>
 		<band height="94" splitType="Stretch">
 			<frame>
 				<reportElement mode="Opaque" x="-20" y="0" width="597" height="65" forecolor="#006699" backcolor="#006699" uuid="29f958b3-9df5-4ee0-905e-9fd33029926f"/>
 				<textField>
-					<reportElement x="247" y="9" width="329" height="47" uuid="ed11273e-d88b-4000-9280-3a9c2bb621c8"/>
+					<reportElement x="19" y="9" width="557" height="47" forecolor="#FFFFFF" uuid="ed11273e-d88b-4000-9280-3a9c2bb621c8"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Stencil" size="33" isBold="true" isItalic="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
 				</textField>
 			</frame>
@@ -40,52 +48,52 @@
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="40" splitType="Stretch">
+		<band height="75" splitType="Stretch">
 			<frame>
 				<reportElement x="227" y="0" width="328" height="40" uuid="793d06e1-d7cc-4d62-ad99-d289a8ce0026"/>
 				<staticText>
-					<reportElement x="5" y="5" width="100" height="30" uuid="41516520-12a2-461a-a7f0-b83f8bcc0bd8"/>
-					<text><![CDATA[TituloJuegos]]></text>
+					<reportElement x="-60" y="10" width="190" height="30" forecolor="#006699" uuid="41516520-12a2-461a-a7f0-b83f8bcc0bd8"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Starcraft" size="16" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Titulo del juego]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="200" y="5" width="100" height="30" uuid="9c2c3528-dedd-49b2-ad8a-001a8032f1af"/>
+					<reportElement x="208" y="10" width="100" height="30" forecolor="#006699" uuid="9c2c3528-dedd-49b2-ad8a-001a8032f1af"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Starcraft" size="16" isBold="true"/>
+					</textElement>
 					<text><![CDATA[Genero]]></text>
 				</staticText>
 			</frame>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="166" y="50" width="386" height="1" uuid="1f2efa15-468e-4870-8f24-1cb1eda2034d"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="440" splitType="Stretch">
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="167" y="22" width="386" height="1" uuid="1f2efa15-468e-4870-8f24-1cb1eda2034d"/>
-			</line>
+		<band height="6" splitType="Stretch">
 			<frame>
-				<reportElement x="167" y="0" width="388" height="358" uuid="dec77cf2-1014-4b3e-9934-7f0c65a83bce"/>
+				<reportElement x="166" y="0" width="386" height="6" uuid="dec77cf2-1014-4b3e-9934-7f0c65a83bce"/>
 				<textField>
-					<reportElement x="0" y="50" width="230" height="290" uuid="605f7008-c06a-4800-80e7-aba0a836a8d2"/>
+					<reportElement x="0" y="10" width="260" height="10" uuid="605f7008-c06a-4800-80e7-aba0a836a8d2"/>
+					<textElement>
+						<font fontName="Starcraft"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="240" y="50" width="146" height="290" uuid="369c9865-6a0d-4de1-afcf-d5ac94c0a8dc"/>
+					<reportElement x="268" y="10" width="118" height="10" uuid="369c9865-6a0d-4de1-afcf-d5ac94c0a8dc"/>
+					<textElement>
+						<font fontName="Starcraft"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{genero}]]></textFieldExpression>
 				</textField>
 			</frame>
-			<image>
-				<reportElement x="0" y="70" width="150" height="147" uuid="fdc83025-e841-44e3-a893-483c783bcb02">
-					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$P{url_flor}]]></imageExpression>
-			</image>
-			<image>
-				<reportElement x="-1" y="22" width="152" height="152" uuid="847f1a8b-e48a-47b2-85db-1279aa8de550">
-					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$P{url_flor}]]></imageExpression>
-			</image>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="7" splitType="Stretch">
+		<band height="44" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="0a05d19c-77ff-48d5-91d6-460d221419e5"/>
 				<graphicElement>

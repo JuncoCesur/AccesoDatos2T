@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.service.ExistDBService;
 import com.example.service.ObjectDBService;
 
 @Controller
@@ -15,6 +16,15 @@ public class ObjectDBController {
 	
 	@Autowired
 	protected ObjectDBService conexionService;
+	
+	/**
+	 * En este controller conectamos e interactuamos con usuarios y juegos
+	 * de la base de datos de ObjectDB
+	 * 
+	 *
+	 * @author Patricia
+	 * @see ObjectDBService
+	 */
 	
 	@ResponseBody
 	@PostMapping ("/juegoAsociado")

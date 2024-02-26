@@ -10,7 +10,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BBDDRepository {
 	
+	/**
+	 * Llamar a la base de datos de MySq
+	 *
+	 * @author Patricia y Junco
+	 * @see BBDDController, BBDDService
+	 */
 	
+	// Metodo para llamar a la base de datos de MySql
 	public Connection llamarBaseDatos() {
 		
 		Connection conexion = null;
@@ -33,7 +40,7 @@ public class BBDDRepository {
 	/**
 	 * Se ejecuta solo al principio para crear las tablas y trabajar.
 	 *
-	 * @author Patricia
+	 * @author Patricia y Junco
 	 * @see BBDDController, BBDDService
 	 */
  

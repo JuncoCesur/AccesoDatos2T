@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
 import com.example.entities.Juego;
+import com.example.service.ExistDBService;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -26,7 +27,16 @@ import net.sf.jasperreports.export.SimplePdfReportConfiguration;
 
 @Repository
 public class JasperRepository {
+	
+	/**
+	 * Obtenemos informe de los juegos
+	 * 
+	 *
+	 * @author Patricia
+	 * @see JasperRepository
+	 */
 
+	// Metodo para obtener una lista de los juegos guardados
 	private List<Juego> obtenerJuegos() {
 		
 		ObjectDBRepository obtenerJuego = new ObjectDBRepository();
@@ -39,17 +49,18 @@ public class JasperRepository {
 		return results;
 	}
 
+	// Metodo para generar el informe
 	public boolean generarInforme() {
 		
 		long nowMillis = System.currentTimeMillis();
-        String nombreFichero = "test " + nowMillis + ".pdf";
+        String nombreFichero = "Informe_Juegos " + nowMillis + ".pdf";
 		
         List<Juego> lista = obtenerJuegos();
-		
-		
+				
 		Map<String, Object> empParams = new HashMap<String, Object>();
 		empParams.put("titulo", "Informe de Juegos");
-		empParams.put("url_flor", "flower1.png");
+		empParams.put("url_starCraft", "starcraft.png");
+
 		
 		JasperPrint empReport;
 		try {

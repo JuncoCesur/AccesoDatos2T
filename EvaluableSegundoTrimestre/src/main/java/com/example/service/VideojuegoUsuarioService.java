@@ -25,6 +25,14 @@ public class VideojuegoUsuarioService {
 	private VideojuegoUsuarioRepository videojuegoUsuarioRepository;
 	@Autowired
 	private CaratulaJuegoRepository caratulaRepository;
+	
+	/**
+	 * 
+	 * 
+	 *
+	 * @author Junco
+	 * @see VideojuegoUsuarioRepository
+	 */
 
 	public List<VideojuegoUsuario> obtenerTodos() {
 		return videojuegoUsuarioRepository.findAll();
@@ -54,12 +62,25 @@ public class VideojuegoUsuarioService {
 	public void eliminar(String id) {
 		videojuegoUsuarioRepository.deleteById(id);
 	}
+	
+	/**
+	 * Insertamos y mostramos las caratulas de los juegos de la lista
+	 * 
+	 *
+	 * @author Patricia
+	 * @see CaratulaJuegoRepository
+	 */
 
+	// Metodo para agregar una caratula a MongoDB
 	public void agregarCaratula(String nombre, byte[] datos) {
 		CaratulaJuego caratula = new CaratulaJuego();
+		
+		// Le adjudicamos un id random
 		caratula.setId(UUID.randomUUID().toString());
+		// Le adjudicamos nombre e imagen
 		caratula.setNombreCaratula(nombre);
 		caratula.setImagenCaratula(datos);
+		
 		caratulaRepository.save(caratula);
 	}
 
@@ -69,19 +90,21 @@ public class VideojuegoUsuarioService {
 		
 		byte[] datosImagen = obtenerDatosImagenDesdeMongoDB(id);{
 			
-			// Verificar si se encontraron datos de imagen
+			// Verificamos si se encontraron datos de imagen
 			if (datosImagen != null) {
-				// Convertir los datos binarios en una imagen BufferedImage
+				
+				// Convertimos los datos binarios en una imagen BufferedImage
 				try {
 					BufferedImage imagen = convertirBytesAImagen(datosImagen);
+					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				// Ahora puedes trabajar con la imagen en tu aplicación, como mostrarla en un
-				// componente de interfaz de usuario
+				
 			} else {
 				System.out.println("No se encontraron datos de imagen para el ID proporcionado.");
+				
 			}
 		}
 		return datosImagen;
@@ -90,8 +113,10 @@ public class VideojuegoUsuarioService {
 	// Método para obtener los datos binarios de la imagen desde MongoDB
 	public byte[] obtenerDatosImagenDesdeMongoDB(String id) {
 
+		// Buscamos en el repository la ID aportada
 		Optional<CaratulaJuego> optionalArchivo = caratulaRepository.findById(id);
 
+		// Si la encuentra, obtenemos la imagen
 		if (optionalArchivo.isPresent()) {
 			return optionalArchivo.get().getImagenCaratula();
 

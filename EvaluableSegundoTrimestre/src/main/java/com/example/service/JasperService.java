@@ -11,9 +11,16 @@ public class JasperService {
 	
 	@Autowired
 	protected JasperRepository jasperRepository;
+	
+	/**
+	 * Generamos el informe de la lista de juegos
+	 * 
+	 *
+	 * @author Patricia
+	 * @see JasperRepository
+	 */
 
 	public void generarInforme() throws Exception {
-		// Lo mandamos al repositorio
 		jasperRepository.generarInforme();
 
 	}

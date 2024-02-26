@@ -13,60 +13,53 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 
+public class ExistJuegoUsuarioDTO {
 
-	@XmlRootElement(name = "usuarios")
-	public class ExistJuegoUsuarioDTO {
+	private Long idSql;
+	// private List<Long> juegos;
+	private Long idJuego;
 
-	    private Long idSql;
-	    //private List<Long> juegos;
-	    private Long idJuego;
+	/*
+	 * @XmlElementWrapper(name = "juegos")
+	 * 
+	 * @XmlElement(name = "juego") public List<Long> getJuegos() { return juegos; }
+	 * 
+	 * public void setJuegos(List<Long> listaJuegos) { this.juegos = listaJuegos; }
+	 */
 
-	    /*@XmlElementWrapper(name = "juegos")
-	    @XmlElement(name = "juego")
-	    public List<Long> getJuegos() {
-	        return juegos;
-	    }
-
-	    public void setJuegos(List<Long> listaJuegos) {
-	        this.juegos = listaJuegos;
-	    }*/
-	    
-	    @XmlElement(name = "idObjectSql")
-    	public Long getIdSql() {
-			return idSql;
-		}
-
-		public void setIdSql(Long idSql) {
-			this.idSql = idSql;
-		}
-		
-		
-		public Long getIdJuego() {
-			return idJuego;
-		}
-
-		public void setIdJuego(Long idJuego) {
-			this.idJuego = idJuego;
-		}
-
-
-		@Autowired
-		protected ExistDBService conexionService;
-	    
-		// Metodo para crear el usuario de ExistDB
-	    public ExistJuegoUsuarioDTO llamarMetodoInsertar(JuegoUsuarioDTO usuarioObject) throws Exception {
-	    	
-	    	ExistJuegoUsuarioDTO usuarioExist = new ExistJuegoUsuarioDTO();
-
-	    	Long idSqlObject = usuarioObject.getIdSql();
-	    	Long idJuego = usuarioObject.getIdJuego();
-	    	
-	    	usuarioExist.setIdSql(idSqlObject);
-	    	usuarioExist.setIdJuego(idJuego);
-	    	
-	    	return usuarioExist;
-	    	
-	    }
-	   
+	@XmlElement(name = "idObjectSql")
+	public Long getIdSql() {
+		return idSql;
 	}
 
+	public void setIdSql(Long idSql) {
+		this.idSql = idSql;
+	}
+
+	public Long getIdJuego() {
+		return idJuego;
+	}
+
+	public void setIdJuego(Long idJuego) {
+		this.idJuego = idJuego;
+	}
+
+	@Autowired
+	protected ExistDBService conexionService;
+
+	// Metodo para crear el usuario de ExistDB
+	public ExistJuegoUsuarioDTO llamarMetodoInsertar(JuegoUsuarioDTO usuarioObject) throws Exception {
+
+		ExistJuegoUsuarioDTO usuarioExist = new ExistJuegoUsuarioDTO();
+
+		Long idSqlObject = usuarioObject.getIdSql();
+		Long idJuego = usuarioObject.getIdJuego();
+
+		usuarioExist.setIdSql(idSqlObject);
+		usuarioExist.setIdJuego(idJuego);
+
+		return usuarioExist;
+
+	}
+
+}
